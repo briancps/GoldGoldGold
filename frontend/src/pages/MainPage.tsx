@@ -85,7 +85,7 @@ function MainPage() {
                     }
                     // above 4 lines waits until the webcam video has actually loaded data before setting isLoading to false (hides loading screen) and starting the detect() loop
 
-                } catch (err) {
+                } catch (err: any) {
                     setLoadingMessage('Error: ' + err.message);
                 }
             }
@@ -151,14 +151,19 @@ function MainPage() {
 
     const sendPoseData = async (poseLandmarks: any) => {
         try {
+            const { data: { session } } = await supabase.auth.getSession();
             await fetch('http://localhost:5000/pose', {  // fetch is the browser's built-in function for making HTTP requests
                 method: 'POST', // sending data, not retrieving
-                headers: { 'Content Type': 'application/json' }, // tells Flask the data is in JSON format
-                body: JSON.stringify({ poseLandmarks }) // converts the poselandmarks object to a JSON string to send
+                headers: { 'Content-Type': 'application/json' }, // tells Flask the data is in JSON format
+                body: JSON.stringify({ 
+                    pose_landmarks: poseLandmarks,
+                    user_id: session?.user.id // the ? after session means if session is null, it will safely return undefined instead of crashing (if we did not put ?)
+                }) // converts the poselandmarks object and user id to a JSON string to send
             })
         } catch (err) { // if Flask isn't running or the request fails, log the error without crashing the app
             console.error('Failed to send pose data:', err);
         }
     }
+    return <div>Main Page</div>; // placeholder return
 }
 export default MainPage; // this line means we are making the MainPage function available for other files to import and use.

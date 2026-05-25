@@ -36,7 +36,7 @@ def session_data():
     try:
         # If user exists, upsert would update the corresponding row of the user
         # If its a new user, create a new row with the new user's credentials
-        supabase_client.table('userprofiles').upsert({'user_id' : user_id}).execute()
+        supabase_client.table('userprofiles').upsert({'user_id' : user_id}, on_conflict = 'user_id').execute()
     # If any errors occur during insertion of the user's session data (e.g. invalid data type, connection issues etc.)
     # Prevents flask backend from crashing due to insertion errors
     except Exception as e:

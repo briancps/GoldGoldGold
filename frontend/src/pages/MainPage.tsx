@@ -87,7 +87,7 @@ function MainPage() {
                     }
                     // above 4 lines waits until the webcam video has actually loaded data before setting isLoading to false (hides loading screen) and starting the detect() loop
 
-                } catch (err) {
+                } catch (err: any) {
                     setLoadingMessage('Error: ' + err.message);
                 }
             }

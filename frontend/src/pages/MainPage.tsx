@@ -24,7 +24,9 @@ function MainPage() {
     const navigate = useNavigate();
 
     // for logging out:
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
     const handleLogout = async () => {
+        setIsLoggingOut(true)
         await supabase.auth.signOut();  // calls supabase's built-in signOut() function
         navigate('/');  // redirect user back to login page
     };
@@ -151,14 +153,120 @@ function MainPage() {
 
     const sendPoseData = async (poseLandmarks: any) => {
         try {
+            const { data: { session } } = await supabase.auth.getSession();
             await fetch('http://localhost:5000/pose', {  // fetch is the browser's built-in function for making HTTP requests
                 method: 'POST', // sending data, not retrieving
-                headers: { 'Content Type': 'application/json' }, // tells Flask the data is in JSON format
-                body: JSON.stringify({ poseLandmarks }) // converts the poselandmarks object to a JSON string to send
+                headers: { 'Content-Type': 'application/json' }, // tells Flask the data is in JSON format
+                body: JSON.stringify({ 
+                    pose_landmarks: poseLandmarks,
+                    user_id: session?.user.id // the ? after session means if session is null, it will safely return undefined instead of crashing (if we did not put ?)
+                }) // converts the poselandmarks object and user id to a JSON string to send
             })
         } catch (err) { // if Flask isn't running or the request fails, log the error without crashing the app
             console.error('Failed to send pose data:', err);
         }
     }
+
+    return (
+        <div style = {{
+            minHeight: '100vh',
+            background: 'black',
+            display: 'flex',
+            flexDirection: 'column'
+        }}>
+        {/* This is to stack the navigation bar and webcam feed in the web app vertically */}
+            <div style = {{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '16px 32px',
+                borderBottom: '1px solid grey'
+            }}>
+            {/* This is for the navigation bar. justify-content: 'space-between' is to ensure the logo and logout button are on opposite ends of the navigation bar */}
+                <div style = {{display: 'flex', alignItems: 'center'}}>
+                {/* This is for the logo and our product's name */}
+                    <img src = {logo} alt = 'GoldGoldGold' style = {{width: '90px', height: '90px'}}></img>
+
+                    <span style = {{
+                        fontSize: '20px',
+                        fontWeight: '700',
+                        fontFamily: 'Bebas Neue',
+                        color: 'rgb(206, 169, 36)'
+                    }}>
+                        GoldGoldGold
+                    </span>
+                </div>
+
+                <button
+                    onClick = {handleLogout}
+                    style = {{
+                        height: '50px',
+                        width: isLoggingOut ? '150px' : '100px',
+                        padding: '8px 16px',
+                        fontSize: '15px',
+                        fontWeight: '700',
+                        fontFamily: 'Bebase Neue',
+                        background: 'rgb(206, 169, 36)',
+                        border: '1px solid grey',
+                        borderRadius: '8px',
+                        color: 'black'
+                    }}>
+                {/* This is for the logout button */}
+                    {isLoggingOut ? 'Logging Out...' : 'Logout'}
+                </button>
+            </div>
+            
+            {/* This is to contain and display the webcam feed */}
+            <div style = {{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '32px',
+                marginTop: '65px'
+            }}>
+                {/* This is to display the loading message as the webcam feed is being set up to be displayed */}
+                {isLoading ? 
+                    <div>
+                        <div style = {{
+                            fontSize: '18px',
+                            color: 'rgb(206, 169, 36)',
+                            marginRight: '30px',
+                            marginBottom: '20px'
+                        }}>
+                            {loadingMessage}
+                        </div>
+                    </div> : null}
+                
+                {/* This is to contain the webcam feed */}
+                <div style = {{
+                    borderRadius: '16px',
+                    overflow: 'hidden',
+                    border: '1px solid rgb(206, 169, 36)',
+                    width: '640px',
+                    height: '480px'
+                }}>
+                    {/* To hide the raw webcam feed we set display to none */}
+                    <video ref = {videoRef} style={{display: 'none'}}></video>
+
+                    {/* Allows skeletal overlay to be drawn */}
+                    <canvas ref = {canvasRef} style={{width: '640px', height: '480px', transform: 'scaleX(-1)'}}></canvas>
+                </div>
+
+                {/* When webcam feed is finished setting up and is displayed for user to see */}
+                {!isLoading ? 
+                    <p style = {{
+                        fontSize: '18px',
+                        fontWeight: '700',
+                        fontFamily: 'Bebas Neue',
+                        color: 'white',
+                        marginRight: '30px',
+                        marginTop: '20px'
+                    }}>
+                        Move back for more accurate detection!
+                    </p> : null}
+            </div>
+        </div>
+    )    
 }
 export default MainPage; // this line means we are making the MainPage function available for other files to import and use.

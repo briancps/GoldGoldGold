@@ -159,7 +159,7 @@ function MainPage() {
                 headers: { 'Content-Type': 'application/json' }, // tells Flask the data is in JSON format
                 body: JSON.stringify({ 
                     pose_landmarks: poseLandmarks,
-                    user_id: session?.user.id // the ? after session means if session is null, it will safely return undefined instead of crashing (if we did not put ?)
+                    user_email: session?.user.email // the ? after session means if session is null, it will safely return undefined instead of crashing (if we did not put ?)
                 }) // converts the poselandmarks object and user id to a JSON string to send
             })
         } catch (err) { // if Flask isn't running or the request fails, log the error without crashing the app

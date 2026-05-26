@@ -23,11 +23,11 @@ def session_data():
         return jsonify({'Error Message' : 'No JSON data Received'}), 400
     
     pose_landmarks = data.get('pose_landmarks')
-    user_id = data.get('user_id')
+    user_email = data.get('user_email')
 
-    # Ensure user_id is received before inserting into Supabase db 
-    if user_id is None:
-        return jsonify({'Error Message' : 'No user_id Received'}), 400
+    # Ensure user_email is received before inserting into Supabase db 
+    if user_email is None:
+        return jsonify({'Error Message' : 'No user_email Received'}), 400
     # Ensure pose data is received 
     if pose_landmarks is None:
         return jsonify({'Error Message' : 'No Pose Landmark Received'}), 400
@@ -36,7 +36,7 @@ def session_data():
     try:
         # If user exists, upsert would update the corresponding row of the user
         # If its a new user, create a new row with the new user's credentials
-        supabase_client.table('userprofiles').upsert({'user_id' : user_id}, on_conflict = 'user_id').execute()
+        supabase_client.table('userprofiles').upsert({'user_email' : user_email}, on_conflict = 'user_email').execute()
     # If any errors occur during insertion of the user's session data (e.g. invalid data type, connection issues etc.)
     # Prevents flask backend from crashing due to insertion errors
     except Exception as e:

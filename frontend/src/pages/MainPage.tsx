@@ -154,7 +154,7 @@ function MainPage() {
     const sendPoseData = async (poseLandmarks: any) => {
         try {
             const { data: { session } } = await supabase.auth.getSession();
-            await fetch('http://localhost:5000/pose', {  // fetch is the browser's built-in function for making HTTP requests
+            await fetch(`${import.meta.env.VITE_BACKEND_URL}/pose`, {  // fetch is the browser's built-in function for making HTTP requests
                 method: 'POST', // sending data, not retrieving
                 headers: { 'Content-Type': 'application/json' }, // tells Flask the data is in JSON format
                 body: JSON.stringify({ 

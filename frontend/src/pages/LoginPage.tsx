@@ -39,7 +39,8 @@ function LoginPage() {
                 if (error) {
                     throw error;
                 }
-                toast.success('Verify your email to complete sign up!') // Notification in the browser to alert user to verify their email
+                toast.success('Sign up successful! Proceed to Login'); // Notification in the browser to alert user to verify their email
+                setIsSignUp(false);
             } else {
                 const {error} = await supabase.auth.signInWithPassword({email, password});
                 if (error) {
@@ -126,10 +127,10 @@ function LoginPage() {
                             fontWeight: '700',
                             color: 'white',
                             marginTop: '-10px',
-                            marginLeft: '5px'
+                            marginLeft: '24.88px'
                         }}>
                             {/* Uses Javascript to access the variable isSignUp, to check if the user is signing up for an account or signing in to an existing one */}
-                            {isSignUp ? 'Create an account' : 'Sign in'}
+                            {isSignUp ? 'Create an account' : 'Login to start training 💪'}
                         </h2>
 
                         <div style = {{marginTop: '-10px', marginBottom: '15px'}}>

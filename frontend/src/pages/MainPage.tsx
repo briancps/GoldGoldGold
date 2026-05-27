@@ -27,8 +27,8 @@ function MainPage() {
     const [isLoggingOut, setIsLoggingOut] = useState(false);
     const handleLogout = async () => {
         setIsLoggingOut(true)
+        setTimeout(() => {navigate('/')}, 500);  // redirect user back to login page
         await supabase.auth.signOut();  // calls supabase's built-in signOut() function
-        navigate('/');  // redirect user back to login page
     };
     /*
     async and await is used for operations that take time (like fetching data / accessing webcam / loading models)

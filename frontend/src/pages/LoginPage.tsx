@@ -48,7 +48,7 @@ function LoginPage() {
                 }
                 navigate('/main'); // Upon successful sign in, bring user to the Main page.
             }
-        } catch (error) {
+        } catch (error : any) {
             setError(error.message);
         } finally { // this block would always run regardless if an error is thrown or not
             setLoading(false);
@@ -56,7 +56,11 @@ function LoginPage() {
     };
 
     // If user were to hit the 'Enter' key, it would also submit the form
-    const handleEnterKey = (event) => {
+    /*
+    React.KeyboardEvent tells TypeScript that this event comes from a keyboard interaction in React
+    <HTMLInputElement> provides further information that this event is coming from an <input> field
+    */
+    const handleEnterKey = (event : React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
             handleSubmit();
         }

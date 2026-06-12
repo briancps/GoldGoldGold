@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
+import PushUp from './pages/PushUp';
+import SitUp from './pages/SitUp';
 
 function App() {
   return (
@@ -12,6 +14,10 @@ function App() {
         <Route path="/" element={<LoginPage />} />
         {/* when URL is "/main", show the MainPage component */}
         <Route path="/main" element={<MainPage />} />
+        {/* when URL is "/pushup", show the PushUp component */}
+        <Route path="/pushup" element={<PushUp />} />
+        {/* when URL is "/situp", show the SitUp component */}
+        <Route path="/situp" element={<SitUp />} />
       </Routes>
     </BrowserRouter>
   );

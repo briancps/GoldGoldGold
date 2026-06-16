@@ -17,7 +17,7 @@ function LoginPage() {
     const [email, setEmail] = useState(''); // Store user's email input
     const [password, setPassword] = useState(''); // Store user's password input
     const [isSignUp, setIsSignUp] = useState(false); // Determines whether the user is signing up or logging in
-    const [loading, setLoading] = useState(false); // Tracks whether a login / sign up process is underway
+    const [isLoading, setIsLoading] = useState(false); // Tracks whether a login / sign up process is underway
     const [error, setError] = useState(''); // Tracks if any error is thrown during user authentication
     const navigate = useNavigate(); // To allow navigation to other routes
 
@@ -25,7 +25,7 @@ function LoginPage() {
         // Reset any previous error
         setError('');
         // Indicates that a user authentication request is underway
-        setLoading(true);
+        setIsLoading(true);
 
         try {
             /*
@@ -51,7 +51,7 @@ function LoginPage() {
         } catch (error : any) {
             setError(error.message);
         } finally { // this block would always run regardless if an error is thrown or not
-            setLoading(false);
+            setIsLoading(false);
         }
     };
 
@@ -202,13 +202,13 @@ function LoginPage() {
 
                         <button
                             onClick = {handleSubmit}
-                            disabled = {loading}
+                            disabled = {isLoading}
                             style = {{
                                 width: '100%',
                                 fontSize: '15px',
                                 fontWeight: '700',
                                 fontFamily: 'Bebas Neue',
-                                background: loading ? 'rgba(255,200,0,0.4)' : 'rgb(206, 169, 36)',
+                                background: isLoading ? 'rgba(255,200,0,0.4)' : 'rgb(206, 169, 36)',
                                 border: 'none',
                                 transition: 'background 0.2s',
                                 padding: '12px',
@@ -217,7 +217,7 @@ function LoginPage() {
                                 marginLeft: '25.8px',
                                 marginTop: '12px',
                             }}>
-                                {loading ? 'Loading...' : (isSignUp ? 'Sign Up' : 'Login')}
+                                {isLoading ? 'Loading...' : (isSignUp ? 'Sign Up' : 'Login')}
                         </button>
                         {/* Upon the button being manually clicked, submit whatever was written in the respective input fields accordingly */}
                         {/* When a user authentication is underway, that is when the variable loading is true, we disable the button so that the user can't access/use it.

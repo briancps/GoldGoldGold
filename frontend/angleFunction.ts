@@ -25,3 +25,5 @@ function calculateAngle(
     const angleInRadians = Math.acos(clampedCosTheta);
     return angleInRadians * (180 / Math.PI);  // pi radians = 180 degrees
 }
+
+export default calculateAngle;

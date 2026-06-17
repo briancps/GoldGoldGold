@@ -4,7 +4,7 @@ object (ie. "point") will have an x-coord, y-coord, z-coord, and visibility.
 We only need the x-coord and y-coord to calculate the angle.
 We will use vectors to do so.
 */
-function calculateAngle(
+export function calculateAngle(
     pointA: {x: number; y: number},
     pointB: {x: number; y: number},  // pointB is where we want the angle subtended at to be calculated (i.e. the joint)
     pointC: {x: number; y: number}
@@ -25,5 +25,3 @@ function calculateAngle(
     const angleInRadians = Math.acos(clampedCosTheta);
     return angleInRadians * (180 / Math.PI);  // pi radians = 180 degrees
 }
-
-export default calculateAngle;

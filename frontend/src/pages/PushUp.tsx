@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { supabase } from "../supabaseClient";
 import Layout from "../components/Layout";
 import Webcam from "../components/Webcam";
-import calculateAngle from "../../angleFunction"
+import {calculateAngle} from "../utils/angleFunction"
 
 /*
 We wish for the users to have their left shoulder, left elbow and left wrist facing the camera to count their reps.
@@ -22,7 +22,8 @@ function PushUp() {
       // We are destructuring here to get the session directly from response.data
       const {data : {session}} = await supabase.auth.getSession();
       // Store the current user's email into our variable
-      userEmailRef.current = session?.user.email;
+      // ?? operator is used to ensure that if session?.user.email were to be null or undefined, we would assign the variable to null instead
+      userEmailRef.current = session?.user.email ?? null;
     };
     
     // Since useEffect cannot be async, we have to define an async function within useEffect and call it after defining this async function

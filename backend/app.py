@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from supabase_connection import supabase_client
+from utils import count_pushup_rep, count_situp_rep, reset_rep_state
 
 app = Flask(__name__)
 
@@ -16,7 +17,7 @@ def test():
 # methods would be POST since we are getting data from users to be stored in Supabase db under that user
 @app.route('/pose', methods = ['POST'])
 def session_data():
-    # Get pose landmark and user id data from React frontend
+    # Get user_email, exercise_type and angle data from React frontend
     data = request.get_json()
     # Ensure JSON data is receieved 
     if data is None:
@@ -43,6 +44,38 @@ def session_data():
         return jsonify({'Error Message' : str(e)}), 500
     
     return jsonify({'Message' : 'Pose Landmark Successfully Received'}), 201
+
+@app.route("/session/save", methods = ["POST"])
+def session_save():
+    data = request.get_json()
+    if data is None:
+        return jsonify({'Error Message' : 'No JSON data Received'}), 400
+    
+    user_email = data.get('user_email')
+    exercise_type = data.get('exercise_type')
+    rep_count = data.get('rep_count')
+
+    if user_email is None:
+        return jsonify({'Error Message' : 'No user_email Received'}), 400
+    if exercise_type is None:
+        return jsonify({'Error Message' : 'No Exercise Type Received'}), 400
+    if rep_count is None:
+        return jsonify({'Error Message' : 'No Rep Count Received'}), 400
+    
+    try:
+        supabase_client.table('userprofiles').insert({
+            'user_email' : user_email,
+            'exercise_type' : exercise_type,
+            # int(rep_count) is to ensure rep_count data is forwarded to Supabase as in integer to be saved as expected
+            'rep_count' : int(rep_count)
+        }).execute()
+    except Exception as err:
+        return jsonify({'Error Message' : str(err)}), 500
+    
+    # After session ends and the current user's session data has been saved to Supabase, we reset the rep state so that the next session starts afresh
+    reset_rep_state()
+
+    return jsonify({'Message' : "User's Session Data Has Been Saved Successfully"}), 201
 
 if __name__ == '__main__':
     app.run(debug = True)

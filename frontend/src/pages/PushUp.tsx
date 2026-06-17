@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { supabase } from "../supabaseClient";
 import Layout from "../components/Layout";
 import Webcam from "../components/Webcam";
-import {calculateAngle} from "../utils/angleFunction"
+import { calculateAngle } from "../utils/angleFunction";
 
 /*
 We wish for the users to have their left shoulder, left elbow and left wrist facing the camera to count their reps.
@@ -83,4 +83,4 @@ function PushUp() {
   )
 }
 
-export default PushUp
+export default PushUp;

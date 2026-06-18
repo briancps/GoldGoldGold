@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
 
 // Defines what props the Layout component expects to receive
-type LayoutProps = {
+interface LayoutProps {
     // children prop refers to anything within <Layout></Layout>
     // ReactNode here allows the content within <Layout></Layout> to be any valid React renderable content
     children : ReactNode;

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-type ResultOverlayProps = {
+interface ResultOverlayProps {
     exerciseType : string; // exercise type to be displayed on overlay at the end of session
     repCount : number; // final rep count to be displayed to user at the end of session
     onTryAgain : () => void // callback field so that when user clicks "Try Again" it calls a function defined in the parent component

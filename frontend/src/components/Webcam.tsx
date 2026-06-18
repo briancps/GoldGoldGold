@@ -10,7 +10,7 @@ import { useEffect, useRef, useState } from 'react';
 // useState: takes in the initial value as input; stores a value that can change over time, and re-renders the UI when it changes
 import { PoseLandmarker, FilesetResolver, DrawingUtils } from '@mediapipe/tasks-vision';
 
-type WebcamProps = {
+interface WebcamProps {
     // When a pose is detected, it calls this field to forward the pose data detected up to the parent page.
     poseDetected : (poseLandmarks : any) => void;
 }

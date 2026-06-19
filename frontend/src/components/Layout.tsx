@@ -30,6 +30,11 @@ function Layout({children} : LayoutProps) {
         await supabase.auth.signOut();  // calls supabase's built-in signOut() function
     };
 
+    //for home button
+    const handleHomeButton = () => {
+        navigate('/main');
+    };
+
     return (
         <div style = {{
             minHeight: '100vh',
@@ -59,24 +64,47 @@ function Layout({children} : LayoutProps) {
                         GoldGoldGold
                     </span>
                 </div>
+                
+                <div style = {{
+                    display : 'flex',
+                    gap : '12px'
+                }}>
+                    <button
+                        onClick = {handleHomeButton}
+                        style = {{
+                            height: '50px',
+                            width: isLoggingOut ? '150px' : '100px',
+                            padding: '8px 16px',
+                            fontSize: '15px',
+                            fontWeight: '700',
+                            fontFamily: 'Bebase Neue',
+                            background: 'rgb(206, 169, 36)',
+                            border: '1px solid grey',
+                            borderRadius: '8px',
+                            color: 'black'
+                        }}>
+                            𖠿 Home
+                    </button>
 
-                <button
-                    onClick = {handleLogout}
-                    style = {{
-                        height: '50px',
-                        width: isLoggingOut ? '150px' : '100px',
-                        padding: '8px 16px',
-                        fontSize: '15px',
-                        fontWeight: '700',
-                        fontFamily: 'Bebase Neue',
-                        background: 'rgb(206, 169, 36)',
-                        border: '1px solid grey',
-                        borderRadius: '8px',
-                        color: 'black'
-                    }}>
-                {/* This is for the logout button */}
-                    {isLoggingOut ? 'Logging Out...' : 'Logout'}
-                </button>
+                    <button
+                        onClick = {handleLogout}
+                        style = {{
+                            height: '50px',
+                            width: isLoggingOut ? '150px' : '100px',
+                            padding: '8px 16px',
+                            fontSize: '15px',
+                            fontWeight: '700',
+                            fontFamily: 'Bebase Neue',
+                            background: 'rgb(206, 169, 36)',
+                            border: '1px solid grey',
+                            borderRadius: '8px',
+                            color: 'black'
+                        }}>
+                    {/* This is for the logout button */}
+                        {isLoggingOut ? 'Logging Out...' : '⏻ Logout'}
+                    </button>
+                </div>
+                
             </div>
             
             {/* This is to display the page specific content */}

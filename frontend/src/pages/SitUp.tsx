@@ -1,8 +1,11 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import { supabase } from "../supabaseClient";
 import Layout from "../components/Layout";
 import Webcam from "../components/Webcam";
 import { calculateAngle } from "../utils/angleFunction";
+import Timer from "../components/Timer";
+import ResultsOverlay from "../components/ResultsOverlay";
 
 /*
 We wish for the users to have their left shoulder, left hip and left knee facing the camera to count their reps.
@@ -12,6 +15,41 @@ Left shoulder - 11; Left hip - 23; Left knee - 25;
 */
 
 function SitUp() {
+  const navigate = useNavigate();
+  
+  useEffect(
+       () => {
+           const checkAuth = async () => { // this function checks if the user is logged in
+               const { data: { session } } = await supabase.auth.getSession();
+               // the above asks supabase "is there a currently logged in user?", which it returns an object like { data: { session: ... } }
+               // we then unpack that object to only extract the session value directly
+               if (!session) {   // if there is no session, redirect back to login page
+                   navigate('/');
+               }
+           }
+           checkAuth() // actually calling the defined function above
+       },
+       [] // recall that the empty [] here means "only run this once when the page first loads"
+  );
+
+  // Track if the user has started a session
+  const [isSessionActive, setIsSessionActive] = useState(false);
+  // Track when session has ended for the overlay to appear
+  const [isSessionEnded, setIsSessionEnded] = useState(false);
+  // Track the 10s countdown preparation for user to get into position
+  const [isCountingDown, setIsCountingDown] = useState(false);
+
+  // Needed to re-render React to display the live rep counter
+  const [repCount, setRepCount] = useState(0);
+  // Since state updates are asynchronous, reading repCount immediately may result in inaccuracy (wrong/old value). Thus, we need
+  // this ref to always hold the most updated rep count value, this is to ensure the correct final rep count is saved at end of session
+  const repCountRef = useRef(0)
+
+  // This means every time React re-renders due to changes in repCount, update current value of repCountRef to updated value of repCount
+  useEffect(() => {
+    repCountRef.current = repCount
+  }, [repCount])
+
   // To send the user email to the backend to store in Supabase.
   // <string | null> is for TypeScript to recognise that it can be either of type string or null since the intial value would be null.
   const userEmailRef = useRef<string | null>(null);
@@ -36,6 +74,11 @@ function SitUp() {
   const lastSentRef = useRef(0);
 
   const handlePoseDetected = async (poseLandmarks : any) => {
+    // If session has yet to be started, we don't send any data yet
+    if (!isSessionActive || isCountingDown) {
+      return;
+    }
+
     const currTime = Date.now();
     // If the last time data was sent to flask was < 100ms, don't send another request yet and just return.
     if (currTime - lastSentRef.current < 100) {
@@ -47,7 +90,7 @@ function SitUp() {
     // recall landmarks are Left shoulder - 11; Left hip - 23; Left knee - 25;
 
     try {
-      await fetch(`${import.meta.env.VITE_BACKEND_URL}/pose`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/pose`, {
         method : 'POST',
         headers : {'Content-Type' : 'application/json'},
         body : JSON.stringify({
@@ -56,9 +99,43 @@ function SitUp() {
           angle : sitUpAngle
         })
       });
+
+      const data = await response.json();
+      // If data.count is null/undefined, we return a default value of 0
+      setRepCount(data.count ?? 0);
     } catch (err) {
       console.error("Data failed to send: ", err);
     }
+  }
+
+  // This is to reset when user clicks "Start" or "Try Again". This ensures the new session starts afresh for the current user
+  const handleSessionStart = async () => {
+    setRepCount(0);
+    repCountRef.current = 0;
+    lastSentRef.current = 0;
+    setIsSessionEnded(false);
+    setIsSessionActive(true);
+    setIsCountingDown(true);
+  }
+
+  // This is to handle when the 10s countdown preparation is up
+  const handleCountdownEnd = () => {
+    setIsCountingDown(false);
+  }
+
+  const handleSessionEnded = async () => {
+    setIsSessionEnded(true);
+    setIsSessionActive(false);
+
+    await fetch(`${import.meta.env.VITE_BACKEND_URL}/session/save`, {
+      method : 'POST',
+      headers : {'Content-Type' : 'application/json'},
+      body : JSON.stringify({
+          user_email : userEmailRef.current,
+          exercise_type : 'sit-up',
+          rep_count : repCountRef.current
+        })
+    })
   }
   return (
     <Layout>
@@ -66,20 +143,73 @@ function SitUp() {
         display : 'flex',
         flexDirection : 'column',
         alignItems : 'center',
-        justifyContent : 'center'
+        justifyContent : 'center',
+        gap : '16px',
+        padding : '24px 20px',
+        marginLeft : '6px'
       }}>
         <h1 style = {{
           fontSize : '40px',
           fontWeight : '700',
           fontFamily : 'Bebas Neue',
           color: "rgb(206, 169, 36)",
-          marginTop : '60px',
-          marginBottom : '-50px'
+          margin : 0,
+          alignSelf : 'flex-start',
+          marginBottom : '-60px',
+          border : '1px solid rgb(206, 169, 36)',
+          padding: '8px 12px',
+          borderRadius : '12px'
         }}>
           Sit-Up
         </h1>
 
-        <Webcam poseDetected={handlePoseDetected}></Webcam>
+        <div style = {{
+          position : 'relative',
+          display : 'flex',
+          flexDirection : 'column',
+          alignItems : 'center',
+          gap : '8px'}}>
+          
+          <div style = {{
+            display : 'flex',
+            gap : '32px',
+            alignItems : 'center',
+            marginRight : '27px'
+          }}>
+            <Timer isActive = {isSessionActive} onTimeUp = {handleSessionEnded} onCountdownEnd = {handleCountdownEnd}></Timer>
+
+            <span style = {{
+              fontSize : '40px',
+              color: "white",
+              fontFamily : 'Bebas Neue',
+            }}>
+              Reps: {repCount}
+            </span>
+          </div>
+
+          {(!isSessionActive && !isSessionEnded) ? 
+          <button 
+            onClick={handleSessionStart} 
+            style = {{
+              padding : '12px 32px',
+              fontSize : '24px',
+              fontWeight : '700',
+              fontFamily : 'Bebas Neue',
+              background : 'rgb(206, 169, 36)',
+              border : 'none',
+              borderRadius : '8px',
+              color : 'black',
+              cursor : 'pointer',
+              marginRight : '27px'
+            }}>
+              Start
+            </button> : null}
+
+          <Webcam poseDetected={handlePoseDetected} exerciseType="sit-up"></Webcam>
+
+          {isSessionEnded ? 
+            <ResultsOverlay exerciseType="Push-Up" repCount={repCount} onTryAgain={handleSessionStart}></ResultsOverlay> : null}
+        </div>
       </div>
     </Layout>
   )

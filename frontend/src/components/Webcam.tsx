@@ -13,9 +13,10 @@ import { PoseLandmarker, FilesetResolver, DrawingUtils } from '@mediapipe/tasks-
 interface WebcamProps {
     // When a pose is detected, it calls this field to forward the pose data detected up to the parent page.
     poseDetected : (poseLandmarks : any) => void;
+    exerciseType? : string
 }
 
-function Webcam({poseDetected} : WebcamProps) {
+function Webcam({poseDetected, exerciseType} : WebcamProps) {
     const videoRef = useRef<HTMLVideoElement>(null); // null is the initial value of the ref. So before the page loads, videoRef.current = null (nothing there yet)
     // then after the page loads, videoRef.current = the actual video element
     const canvasRef = useRef<HTMLCanvasElement>(null); // canvas is like a whiteboard placed in front of the projector - it shows the video image + draws the skeleton on top
@@ -128,8 +129,7 @@ function Webcam({poseDetected} : WebcamProps) {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '32px',
-            marginTop: '65px'
+            padding: '16px',
         }}>
             {/* This is to display the loading message as the webcam feed is being set up to be displayed */}
             {isLoading ? 
@@ -166,10 +166,15 @@ function Webcam({poseDetected} : WebcamProps) {
                     fontWeight: '700',
                     fontFamily: 'Bebas Neue',
                     color: 'white',
-                    marginRight: '30px',
-                    marginTop: '20px'
+                    marginRight: '25px',
+                    marginTop: '20px',
+                    textAlign : 'center'
                 }}>
-                    Move back for more accurate detection!
+                    Move back for more accurate detection! <span style = {{color : 'red'}}>(Full Body should be visible)</span>
+                    <br/>
+                    Ensure your 
+                    <span style = {{color : 'red'}}>{exerciseType === 'push-up' ? ' left shoulder, elbow and wrist ' : ' left shoulder, hip and knee '}</span> 
+                    are facing the camera
                 </p> : null}
         </div>
     )

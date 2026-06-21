@@ -80,7 +80,7 @@ function Timer({ isActive, onTimeUp, onCountdownEnd }: TimerProps) {
                     zIndex: 10
                 }}>
                     <p style={{
-                        fontSize: '20px',
+                        fontSize: '50px',
                         color: 'white',
                         fontFamily: 'Bebas Neue',
                         margin: 0

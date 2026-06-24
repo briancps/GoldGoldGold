@@ -99,7 +99,7 @@ function MainPage() {
                 fontFamily : 'Bebas Neue',
                 marginTop : '40px',
                 marginLeft : '24px'}}> 
-                Get started on the 60s statics training of your choice! 
+                Get started on the 60<span style={{ fontSize: '15px' }}>s</span> statics training of your choice! 
             </p>
         </div>
     </Layout>

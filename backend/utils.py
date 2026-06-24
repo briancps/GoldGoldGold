@@ -4,12 +4,12 @@ VISIBILITY_THRESHOLD = 0.5
 
 rep_state = {
     "pushup" : {"position": "neutral", "count": 0},
-    "situp" : {"position": "down", "count": 0},
+    "situp" : {"position": "neutral", "count": 0},
 }
 
 def reset_rep_state():
     rep_state["pushup"] = {"position": "neutral", "count": 0}
-    rep_state["situp"] = {"position": "down", "count": 0}
+    rep_state["situp"] = {"position": "neutral", "count": 0}
 
 def count_pushup_rep(elbow_angle, hip_angle, shoulder_visibility, elbow_visibility, wrist_visibility, hip_visibility, knee_visibility):
     """
@@ -72,7 +72,7 @@ def count_pushup_rep(elbow_angle, hip_angle, shoulder_visibility, elbow_visibili
 
     return state["count"]
 
-def count_situp_rep(hip_angle):
+def count_situp_rep(hip_angle, shoulder_visibility, hip_visibility, knee_visibility):
     """
     Tracks sit-up reps using hip angle.
 
@@ -80,6 +80,9 @@ def count_situp_rep(hip_angle):
     Up position: hip_angle <= 55
 
     Valid rep: down --> up --> down
+
+    Partial reps are not counted. If any required landmark is not visible,
+    the state resets to neutral to prevent false counts.
 
     Returns the current valid rep count.
     """
@@ -89,10 +92,35 @@ def count_situp_rep(hip_angle):
 
     state = rep_state["situp"]
 
-    if state["position"] == "down" and hip_angle <= SITUP_UP_THRESHOLD_ANGLE:
+    # check all required landmarks are actually visible in frame
+    # if any landmark is not visible, we cannot trust the angles, so reset to neutral position to prevent false counts
+    all_landmarks_visible = (
+        shoulder_visibility > VISIBILITY_THRESHOLD and
+        hip_visibility > VISIBILITY_THRESHOLD and
+        knee_visibility > VISIBILITY_THRESHOLD
+    )
+
+    if not all_landmarks_visible:
+        # all required landmarks are not reliably in frame --> reset state back to neutral position
+        state["position"] = "neutral"
+        return state["count"]
+
+    # proper down position
+    is_proper_down = hip_angle > SITUP_DOWN_THRESHOLD_ANGLE
+
+    # proper up position
+    is_proper_up = hip_angle <= SITUP_UP_THRESHOLD_ANGLE
+
+    if state["position"] == "neutral" and is_proper_down:
+        # user has assumed proper starting position (lying flat)
+        state["position"] = "down"
+
+    elif state["position"] == "down" and is_proper_up:
+        # user has sat up properly from the proper down position
         state["position"] = "up"
 
-    elif state["position"] == "up" and hip_angle > SITUP_DOWN_THRESHOLD_ANGLE:
+    elif state["position"] == "up" and is_proper_down:
+        # user has returned to proper down position from the proper up position --> a valid rep is completed
         state["position"] = "down"
         state["count"] += 1
 

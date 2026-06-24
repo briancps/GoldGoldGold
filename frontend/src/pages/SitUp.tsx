@@ -39,6 +39,18 @@ function SitUp() {
   // Track the 10s countdown preparation for user to get into position
   const [isCountingDown, setIsCountingDown] = useState(false);
 
+  // To ensure React has the latest boolean value on whether the session is active or not
+  const isSessionActiveRef = useRef(false);
+  const isCountingDownRef = useRef(false);
+
+  useEffect(() => {
+    isSessionActiveRef.current = isSessionActive;
+  }, [isSessionActive]);
+
+  useEffect(() => {
+    isCountingDownRef.current = isCountingDown;
+  }, [isCountingDown]);
+
   // Needed to re-render React to display the live rep counter
   const [repCount, setRepCount] = useState(0);
   // Since state updates are asynchronous, reading repCount immediately may result in inaccuracy (wrong/old value). Thus, we need
@@ -75,7 +87,7 @@ function SitUp() {
 
   const handlePoseDetected = async (poseLandmarks : any) => {
     // If session has yet to be started, we don't send any data yet
-    if (!isSessionActive || isCountingDown) {
+    if (!isSessionActiveRef.current || isCountingDownRef.current) {
       return;
     }
 
@@ -86,8 +98,11 @@ function SitUp() {
     }
     lastSentRef.current = currTime;
 
-    const sitUpAngle = calculateAngle(poseLandmarks[11], poseLandmarks[23], poseLandmarks[25]);
-    // recall landmarks are Left shoulder - 11; Left hip - 23; Left knee - 25;
+    const leftShoulder = poseLandmarks[11];
+    const leftHip = poseLandmarks[23];
+    const leftKnee = poseLandmarks[25];
+
+    const hipAngle = calculateAngle(leftShoulder, leftHip, leftKnee);
 
     try {
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/pose`, {
@@ -96,13 +111,17 @@ function SitUp() {
         body : JSON.stringify({
           user_email : userEmailRef.current,
           exercise_type : 'sit-up',
-          angle : sitUpAngle
+          hip_angle : hipAngle,
+          // We have to ensure all landmarks are visible to count as a valid rep
+          shoulder_visibility: leftShoulder.visibility,
+          hip_visibility: leftHip.visibility,
+          knee_visibility: leftKnee.visibility
         })
       });
 
       const data = await response.json();
       // If data.count is null/undefined, we return a default value of 0
-      setRepCount(data.count ?? 0);
+      setRepCount(data['Valid Count'] ?? 0);
     } catch (err) {
       console.error("Data failed to send: ", err);
     }
@@ -116,16 +135,20 @@ function SitUp() {
     setIsSessionEnded(false);
     setIsSessionActive(true);
     setIsCountingDown(true);
+    isSessionActiveRef.current = true;
+    isCountingDownRef.current = true;
   }
 
   // This is to handle when the 10s countdown preparation is up
   const handleCountdownEnd = () => {
     setIsCountingDown(false);
+    isCountingDownRef.current = false;
   }
 
   const handleSessionEnded = async () => {
     setIsSessionEnded(true);
     setIsSessionActive(false);
+    isSessionActiveRef.current = false;
 
     await fetch(`${import.meta.env.VITE_BACKEND_URL}/session/save`, {
       method : 'POST',

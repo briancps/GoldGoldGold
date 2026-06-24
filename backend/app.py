@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from supabase_connection import supabase_client
-from utils import count_pushup_rep, count_situp_rep, reset_rep_state
+from backend.supabase_connection import supabase_client
+from backend.utils import count_pushup_rep, count_situp_rep, reset_rep_state
 
 app = Flask(__name__)
 

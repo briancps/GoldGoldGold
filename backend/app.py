@@ -32,18 +32,21 @@ def session_data():
     user_email = data.get("user_email")
     exercise_type = data.get("exercise_type")
 
-    # Tuple containing the required fields for rep counting
-    required_fields = (elbow_angle, hip_angle, shoulder_visibility, elbow_visibility, wrist_visibility, hip_visibility, knee_visibility, user_email, exercise_type)
+    # Tuple containing the required fields common to both push-ups and sit-ups for rep counting
+    required_fields = (hip_angle, shoulder_visibility, hip_visibility, knee_visibility, user_email, exercise_type)
 
     # If any of the field is missing, send an error message
     if any(field is None for field in required_fields):
         return jsonify({'Error Message' : 'Missing Required Fields'}), 400
 
     if exercise_type == 'push-up' :
+        # need to include the additional fields for push-ups specifically (elbow_angle, elbow_visibility, wrist_visibility)
+        if any(field is None for field in (elbow_angle, elbow_visibility, wrist_visibility)):
+            return jsonify({'Error Message' : 'Missing Required Fields'}), 400 
         # float(angle) ensures angle is treated as a numeric value
         count = count_pushup_rep(float(elbow_angle), float(hip_angle), float(shoulder_visibility), float(elbow_visibility), float(wrist_visibility), float(hip_visibility), float(knee_visibility))
     elif exercise_type == 'sit-up' :
-        count = count_situp_rep(float(hip_angle))
+        count = count_situp_rep(float(hip_angle), float(shoulder_visibility), float(hip_visibility), float(knee_visibility))
     else :
         return jsonify({'Error Message' : f"Invalid Exercise Type : {exercise_type}"}), 400
 

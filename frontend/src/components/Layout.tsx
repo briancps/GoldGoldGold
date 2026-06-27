@@ -9,6 +9,7 @@ interface LayoutProps {
     // children prop refers to anything within <Layout></Layout>
     // ReactNode here allows the content within <Layout></Layout> to be any valid React renderable content
     children : ReactNode;
+    onHomeButton : () => void
 }
 
 // The parameter here is the props object as defined above.
@@ -19,7 +20,7 @@ interface LayoutProps {
     We then have to include the type annotation to tell TypeScript that this component expect props that match
     the LayoutProps type as defined above
 */
-function Layout({children} : LayoutProps) {
+function Layout({children, onHomeButton} : LayoutProps) {
     const navigate = useNavigate();
 
     // for logging out:
@@ -28,11 +29,6 @@ function Layout({children} : LayoutProps) {
         setIsLoggingOut(true)
         setTimeout(() => {navigate('/')}, 500);  // redirect user back to login page
         await supabase.auth.signOut();  // calls supabase's built-in signOut() function
-    };
-
-    //for home button
-    const handleHomeButton = () => {
-        navigate('/main');
     };
 
     return (
@@ -70,7 +66,7 @@ function Layout({children} : LayoutProps) {
                     gap : '12px'
                 }}>
                     <button
-                        onClick = {handleHomeButton}
+                        onClick = {onHomeButton}
                         style = {{
                             height: '50px',
                             width: isLoggingOut ? '150px' : '100px',

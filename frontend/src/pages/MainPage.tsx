@@ -31,8 +31,12 @@ function MainPage() {
        [] // recall that the empty [] here means "only run this once when the page first loads"
    );
 
+   const handleHomeButton = async () => {
+    navigate('/main');
+   }
+
    return (
-    <Layout>
+    <Layout onHomeButton={handleHomeButton}>
         <div style = {{
             display : 'flex',
             flexDirection : 'column',

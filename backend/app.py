@@ -87,7 +87,7 @@ def session_save():
 @app.route("/session/reset", methods = ["POST"])
 def session_reset():
     reset_rep_state()
-    return jsonify({"Message" : "Session has been resetted!"})
+    return jsonify({"Message" : "Session has been reset!"})
 
 if __name__ == '__main__':
     app.run(debug = True)

@@ -26,6 +26,11 @@ function Layout({children, onHomeButton} : LayoutProps) {
     // for logging out:
     const [isLoggingOut, setIsLoggingOut] = useState(false);
     const handleLogout = async () => {
+        await fetch(`${import.meta.env.VITE_BACKEND_URL}/session/reset`, {
+            method : 'POST',
+            headers : {'Content-Type' : 'application/json'},
+            body : JSON.stringify({})
+        })
         setIsLoggingOut(true)
         setTimeout(() => {navigate('/')}, 500);  // redirect user back to login page
         await supabase.auth.signOut();  // calls supabase's built-in signOut() function

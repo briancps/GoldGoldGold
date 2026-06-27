@@ -84,5 +84,10 @@ def session_save():
 
     return jsonify({'Message' : "User's Session Data Has Been Saved Successfully"}), 201
 
+@app.route("/session/reset", methods = ["POST"])
+def session_reset():
+    reset_rep_state()
+    return jsonify({"Message" : "Session has been reset!"})
+
 if __name__ == '__main__':
     app.run(debug = True)

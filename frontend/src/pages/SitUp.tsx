@@ -127,6 +127,23 @@ function SitUp() {
     }
   }
 
+  const handleHomeButton = async () => {
+    await fetch(`${import.meta.env.VITE_BACKEND_URL}/session/reset`, {
+      method : 'POST',
+      headers : {'Content-Type' : 'application/json'},
+      body : JSON.stringify({})
+    })
+    setRepCount(0);
+    repCountRef.current = 0;
+    lastSentRef.current = 0;
+    setIsSessionEnded(false);
+    setIsSessionActive(false);
+    setIsCountingDown(false);
+    isSessionActiveRef.current = false;
+    isCountingDownRef.current = false;
+    navigate('/main')
+  }
+
   // This is to reset when user clicks "Start" or "Try Again". This ensures the new session starts afresh for the current user
   const handleSessionStart = async () => {
     setRepCount(0);
@@ -161,7 +178,7 @@ function SitUp() {
     })
   }
   return (
-    <Layout>
+    <Layout onHomeButton={handleHomeButton}>
       <div style = {{
         display : 'flex',
         flexDirection : 'column',
@@ -231,7 +248,7 @@ function SitUp() {
           <Webcam poseDetected={handlePoseDetected} exerciseType="sit-up"></Webcam>
 
           {isSessionEnded ? 
-            <ResultsOverlay exerciseType="Push-Up" repCount={repCount} onTryAgain={handleSessionStart}></ResultsOverlay> : null}
+            <ResultsOverlay exerciseType="Sit-Up" repCount={repCount} onTryAgain={handleSessionStart}></ResultsOverlay> : null}
         </div>
       </div>
     </Layout>

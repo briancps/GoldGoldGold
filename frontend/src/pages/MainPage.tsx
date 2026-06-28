@@ -43,12 +43,31 @@ function MainPage() {
             alignItems : 'center',
             justifyContent : 'center',
         }}>
+            <p style = {{
+                color : 'white',
+                fontSize : '20px',
+                fontWeight : '700',
+                fontFamily : 'Bebas Neue',
+                marginLeft : '24px'}}> 
+                Note that upon your very first login, the live rep counter may be glitchy and inaccurate. 
+            </p>
+            
+            <p style = {{
+                color : 'white',
+                fontSize : '20px',
+                fontWeight : '700',
+                fontFamily : 'Bebas Neue',
+                marginTop : '-5px',
+                marginLeft : '24px'}}> 
+                Give it 10 seconds and try again!
+            </p>
+
             <h1 style = {{
                 fontSize : '36px',
                 fontWeight : '700',
                 fontFamily : 'Bebas Neue',
                 color: 'rgb(206, 169, 36)',
-                marginTop : '150px',
+                marginTop : '70px',
                 marginLeft : '15px'
             }}>
                 Choose Your Exercise
@@ -98,12 +117,12 @@ function MainPage() {
 
             <p style = {{
                 color : 'white',
-                fontSize : '18px',
+                fontSize : '20px',
                 fontWeight : '700',
                 fontFamily : 'Bebas Neue',
                 marginTop : '40px',
                 marginLeft : '24px'}}> 
-                Get started on the 60<span style={{ fontSize: '15px' }}>s</span> statics training of your choice! 
+                Get started on the 60<span style={{ fontSize: '16px' }}>s</span> statics training of your choice! 
             </p>
         </div>
     </Layout>

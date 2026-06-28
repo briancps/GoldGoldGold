@@ -391,45 +391,51 @@ arising from floating-point computations.
 
 **What it does:**
 
-The calculateAngle function takes in 3 landmarks (pointA, pointB,
-pointC) as arguments, and outputs the interior angle formed at the
-second landmark, that is, pointB as the vertex. This means that pointB
-is treated as the joint (like the elbow, hip etc.).
+The `calculateAngle` function takes in 3 landmarks (`pointA`, `pointB`, `pointC`) as arguments, and outputs the interior angle formed at the second landmark, that is, `pointB` as the vertex. This means that `pointB` is treated as the joint (like the elbow, knee, hip, etc.).
 
-To achieve this, we use the mathematical concept of vectors.
-Specifically, the dot product of two vectors, given by the equation:
+To achieve this, we use the mathematical concept of vectors. Specifically, the dot product of two vectors, given by the equation:
 
-$\overrightarrow{BA}$ $\bullet$ $\overrightarrow{BC}$ =
-$\left| \overrightarrow{BA} \right|\left| \overrightarrow{BC} \right|\ cos\theta$
-
+```math
+\overrightarrow{BA}\cdot\overrightarrow{BC}
+=
+\left|\overrightarrow{BA}\right|
+\left|\overrightarrow{BC}\right|
+\cos\theta
+```
 where $\theta$ is our desired angle.
 
 Rearranging, we get:
+```math
+\cos\theta
+=
+\frac{
+\overrightarrow{BA}\cdot\overrightarrow{BC}
+}{
+\left|\overrightarrow{BA}\right|
+\left|\overrightarrow{BC}\right|
+}
+```
 
-$\cos\theta = \frac{\overrightarrow{BA}\  \bullet \ \overrightarrow{BC}}{\left| \overrightarrow{BA} \right|\left| \overrightarrow{BC} \right|}$
+Since it is possible for a vector to have a magnitude of $0$, the angle is undefined because the denominator is $0$ and an error is thrown.
 
-Since it is possible for a vector to have a magnitude of 0, the angle is
-undefined because the denominator is 0 and an error is thrown.
+Furthermore, due to floating-point precision errors, the computed value of $\cos\theta$ may be slightly outside the valid range $[-1, 1]$, which would cause $\arccos$ to return `NaN` (Not a Number). To prevent this, we perform clamping to restrict the value to indeed be in the interval $[-1, 1]$:
 
-Furthermore, due to floating-point precision errors, the computed value
-of $\cos\theta$ may be slightly outside the valid range
-\[$-$`<!-- -->`{=html}1, 1\], which would cause $\arccos$ to return NaN
-(Not a Number). To prevent this, we perform clamping to restrict the
-value to indeed be in the interval \[$-$`<!-- -->`{=html}1, 1\]:
+$$
+\max(-1,\min(1,\cos\theta))
+$$
 
-$max( -$`<!-- -->`{=html}1$,min(1,cos\theta))$.
+Applying $\arccos$ to this clamped value will return $\theta$ in radians, which is then converted to degrees by multiplying by:
 
-Applying $\arccos$ to this clamped value will return $\theta$ in
-radians, which is then converted to degrees by multiplying by:
-
-$\frac{180}{\pi}$
+$$
+\frac{180}{\pi}
+$$
 
 **Complexity justification:** The function utilises the mathematical
 concept of vectors, showing a useful application of linear algebra in
 real world contexts. Two edge cases are also taken care of: a
 divide-by-zero guard in the event of zero-length vectors, and clamping
 the value passed into Math.acos() to strictly be in the interval
-\[$-$`<!-- -->`{=html}1, 1\] to prevent NaN.
+$[-1, 1]$ to prevent NaN.
 
 **Design decisions:** We used only the x and y-coordinates since the
 webcam captures a 2D projection of the user's movement from a fixed

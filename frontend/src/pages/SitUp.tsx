@@ -32,6 +32,26 @@ function SitUp() {
        [] // recall that the empty [] here means "only run this once when the page first loads"
   );
 
+  // This is to reset rep state in the event that the user leaves the page (So that when user re-enters the page, rep is reset to 0)
+  useEffect( () => {
+    /*
+    The function returned here is solely a cleanup function that would be called automatically by React when the component unmounts
+    (i.e. when user leaves the page mid session)
+
+    Since this is a cleanup function, we don't use await here because cleanup functions cannot be async.
+    Additionally, we are telling TypeScript that we know fetch returns a Promise but we are intentionally ignoring it 
+    (via the keyword void), since cleanup functions are not async and thus React do not wait for them to finish/complete
+    */
+    return () => {
+      void fetch(`${import.meta.env.VITE_BACKEND_URL}/session/reset`, {
+        method : 'POST',
+        keepalive : true, // Usually when user leaves a page, any pending requests would be cancelled. But this attribute keeps the request alive even after the user leaves the page, so that the reset route request would actually reach Flask which resets rep state when the user leaves the page
+        headers : {'Content-Type' : 'application/json'},
+        body : JSON.stringify({})
+      })
+    }
+  }, []); // This runs when the component mounts
+
   // Track if the user has started a session
   const [isSessionActive, setIsSessionActive] = useState(false);
   // Track when session has ended for the overlay to appear

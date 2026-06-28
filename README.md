@@ -1,6 +1,7 @@
 # GoldGoldGold
+For better view of README, visit the following link: https://drive.google.com/file/d/1DXmbdTq213UhArDrYb_TidVeFnY_BMjN/view?usp=sharing
 
-<img src="images/pic1.png">
+<img src="images/pic1.png" width="200px">
 
 **Team ID:** 6897
 
@@ -11,10 +12,10 @@
 **Milestone:** 2
 
 **GitHub:**
-[[https://github.com/briancps/GoldGoldGold.git]{.underline}](https://github.com/briancps/GoldGoldGold.git)
+https://github.com/briancps/GoldGoldGold.git
 
 **Deployment:**
-[[https://goldgoldgold-nq1y.onrender.com]{.underline}](https://goldgoldgold-nq1y.onrender.com)
+https://goldgoldgold-nq1y.onrender.com
 
 ## Table of Contents
 
@@ -99,19 +100,16 @@ more reliable and accessible way to prepare for the IPPT static
 stations.
 
 **Link to web application:**
-[[https://goldgoldgold-nq1y.onrender.com]{.underline}](https://goldgoldgold-nq1y.onrender.com)
+https://goldgoldgold-nq1y.onrender.com
 
 ## 4. Features
 
 ### Feature 1: User Authentication
 
-![-{{git_url\>https://github.com/briancps/GoldGoldGold/blob/main/images/mPE_Image_2.png}}](media/image7.png){width="2.764607392825897in"
-height="4.057292213473316in"}![-{{git_url\>https://github.com/briancps/GoldGoldGold/blob/main/images/hge_Image_3.png}}](media/image35.png){width="2.6916513560804898in"
-height="4.058181321084865in"}
-
-![-{{git_url\>https://github.com/briancps/GoldGoldGold/blob/main/images/knA_Image_4.png}}](media/image23.png){width="2.7083333333333335in"
-height="0.625in"}![](media/image30.png){width="1.1354166666666667in"
-height="0.5833333333333334in"}
+<img src="images/pic2.png">
+<img src="images/pic3.png">
+<img src="images/pic4.png">
+<img src="images/pic5.png">
 
 **Milestone:** 1
 
@@ -146,8 +144,7 @@ single platform.
 
 ### Feature 2: Main Page
 
-![](media/image28.png){width="5.635416666666667in"
-height="2.819776902887139in"}
+<img src="images/pic6.png">
 
 **Milestone:** 2
 
@@ -175,8 +172,7 @@ format of IPPT change.
 
 ### Feature 3: Start Button
 
-![](media/image17.png){width="1.8400995188101488in"
-height="0.8118088363954505in"}
+<img src="images/pic7.png">
 
 **Milestone:** 2
 
@@ -203,9 +199,8 @@ control, and can begin only when they are ready.
 
 ### Feature 4: 10s Preparation Timer and 60s Session Timer
 
-![](media/image11.png){width="2.834009186351706in"
-height="1.5779385389326335in"}![](media/image20.png){width="1.3854166666666667in"
-height="0.5520833333333334in"}
+<img src="images/pic8.png">
+<img src="images/pic9.png">
 
 **Milestone:** 2
 
@@ -232,19 +227,13 @@ difference.
 
 ### Feature 5: Webcam Feed & Pose Detection
 
-![](media/image43.png){width="5.313765310586176in"
-height="2.9216885389326333in"}
 
-![](media/image45.png){width="5.303641732283465in"
-height="2.8976509186351707in"}
-
-![](media/image47.png){width="2.197082239720035in"
-height="2.627150043744532in"}![](media/image40.png){width="1.43373687664042in"
-height="2.5750667104111984in"}![](media/image40.png){width="1.4552077865266841in"
-height="2.4813167104111984in"}
+<img src="images/pic46.png">
+<img src="images/pic47.png">
+<img src="images/pic10.png">
 
 The above is obtained from
-[[https://developers.google.com/edge/mediapipe/solutions/vision/pose_landmarker]{.underline}](https://developers.google.com/edge/mediapipe/solutions/vision/pose_landmarker)
+https://developers.google.com/edge/mediapipe/solutions/vision/pose_landmarker
 
 **Milestone:** 2
 
@@ -276,8 +265,7 @@ also mirrored to produce a more natural mirror-view for the user.
 
 ### Feature 6: Timer Display and Live Rep Counter Display
 
-![](media/image16.png){width="4.546875546806649in"
-height="1.1763057742782153in"}
+<img src="images/pic11.png">
 
 **Milestone:** 2
 
@@ -450,8 +438,7 @@ intuitive for threshold comparisons in the rep counting logic.
 
 ### Feature 9: Results Overlay
 
-![](media/image8.png){width="5.675521653543307in"
-height="3.1300218722659667in"}
+<img src="images/pic12.png">
 
 **Milestone:** 2
 
@@ -500,11 +487,9 @@ know what their mistake is and correct it.
 
 **Complexity justification:**
 
-![](media/image34.png){width="6.267716535433071in"
-height="1.0138888888888888in"}
+<img src="images/pic13.png">
 
-![](media/image27.png){width="3.5156255468066493in"
-height="1.0191568241469817in"}
+<img src="images/pic14.png">
 
 This feature would extend the existing rep-counting logic by introducing
 additional posture validation. Whereby if the user does not meet the
@@ -541,8 +526,7 @@ the 'History' tab for users to track and view their progress.
 
 **Design decisions:**
 
-![](media/image42.png){width="4.578125546806649in"
-height="1.922455161854768in"}
+<img src="images/pic15.png">
 
 Currently, with these columns to store the respective data in our table,
 we can identify the currently logged in user via *userEmailRef.current*,
@@ -698,8 +682,7 @@ deployed on Render and communicate through HTTPS.
 
 **Architecture Diagram:**
 
-![](media/image14.png){width="6.267716535433071in"
-height="4.472222222222222in"}
+<img src="images/pic16.png">
 
 **Explanation:** The system consists of five major components: the React
 frontend, MediaPipe pose detection, Flask backend, rep-counting logic,
@@ -726,7 +709,7 @@ access the pages beyond the login page.
 
 **User Flow / Use Cases:**
 
-[1st key user journey:]{.underline}
+1st key user journey:
 
 Actor: Registered user
 
@@ -755,7 +738,7 @@ Steps:
 Outcome: The user is able to view real-time rep counting while
 performing the exercise.
 
-[2nd key user journey:]{.underline}
+2nd key user journey:
 
 Actor: Registered user
 
@@ -781,7 +764,7 @@ currently logged in user.
 
 ### 7.1 Design Diagrams
 
-> ![](media/image1.png){width="3.25in" height="3.0208333333333335in"}
+<img src="images/pic17.png">
 
 Our web app currently stores the users' completed exercise sessions in a
 single table. Each record contains the user\'s email, exercise type, rep
@@ -790,7 +773,7 @@ so as to save and store users' completed exercise session data. These
 records can then be queried in the following Milestone to support
 features such as "Workout History"
 
-![](media/image6.png){width="6.267716535433071in" height="5.625in"}
+<img src="images/pic18.png">
 
 The sequence diagram depicts the interactions between the user, frontend
 components, backend server, and database during a push-up session
@@ -815,10 +798,9 @@ to maintain and understand.
 ### 7.2 Design Principles & Patterns *(Apollo / Artemis)*
 
 **Single Responsibility Principle (SRP):**
-![](media/image9.png){width="6.267716535433071in"
-height="0.19444444444444445in"}![](media/image12.png){width="4.984375546806649in"
-height="0.23910323709536307in"}![](media/image2.png){width="6.267716535433071in"
-height="0.1527777777777778in"}
+<img src="images/pic19.png">
+<img src="images/pic20.png">
+<img src="images/pic21.png">
 
 The frontend components are designed such that each component is
 responsible for a single concern. For example, the Webcam component
@@ -840,17 +822,15 @@ to the frontend, while Supabase manages user authentication and session
 data storage. This separation reduces coupling between the various
 components we have and makes our web app easier to maintain and extend.
 
-![](media/image37.png){width="1.2518318022747157in"
-height="2.2343755468066493in"}
+<img src="images/pic22.png">
 
 Our overall project folder structure is also neatly organised into the
 different directories.
 
 **Don't repeat yourself (DRY):**
 
-![](media/image38.png){width="1.8072922134733158in"
-height="1.5274015748031495in"}![](media/image10.png){width="6.267716535433071in"
-height="0.75in"}
+<img src="images/pic23.png">
+<img src="images/pic24.png">
 
 We implemented reusable components and a utility function to minimise
 code duplication throughout our web app. For example, our
@@ -876,12 +856,11 @@ We followed standard naming conventions and style guidelines:
   reducing the risk of missing instances or accidentally modifying
   unrelated values.
 
-![](media/image25.png){width="3.026042213473316in"
-height="0.4322922134733158in"}![](media/image18.png){width="3.1302088801399823in"
-height="0.41940726159230096in"}
+<img src="images/pic25.png">
+<img src="images/pic26.png">
 
 - We followed the React JS naming conventions as described in
-  [[https://dev.to/kristiyanvelkov/react-js-naming-convention-lcg]{.underline}](https://dev.to/kristiyanvelkov/react-js-naming-convention-lcg).
+  https://dev.to/kristiyanvelkov/react-js-naming-convention-lcg
   For our components, we used PascalCase and gave it descriptive and
   meaningful names (E.g. Timer, Layout, Webcam, ResultsOverlay). For our
   files, we used PascalCase and matched the component name (E.g.
@@ -1035,32 +1014,22 @@ height="0.41940726159230096in"}
 ## 8. Planning & Version Control
 
 **GitHub Repository:**
-[[https://github.com/briancps/GoldGoldGold.git]{.underline}](https://github.com/briancps/GoldGoldGold.git)
+https://github.com/briancps/GoldGoldGold.git
 
 ### Version Control Practices
 
 **Commit conventions:** We use conventional commits such as feat:, fix:,
 refactor:
 
-![](media/image22.png){width="3.2203083989501313in"
-height="0.4204560367454068in"}
-
-![](media/image46.png){width="2.5328083989501313in"
-height="0.43009951881014874in"}
-
-![](media/image19.png){width="5.397391732283465in"
-height="0.5330752405949256in"}
+<img src="images/pic27.png">
+<img src="images/pic28.png">
+<img src="images/pic29.png">
 
 **Branching strategy:**
 
-![-{{git_url\>https://github.com/briancps/GoldGoldGold/blob/main/images/439_Image_8.png}}](media/image39.png){width="5.564076990376203in"
-height="0.5987314085739283in"}
-
-![-{{git_url\>https://github.com/briancps/GoldGoldGold/blob/main/images/RJQ_Image_9.png}}](media/image24.png){width="5.538017279090114in"
-height="0.5904505686789151in"}
-
-![](media/image41.png){width="5.449475065616798in"
-height="0.7108016185476815in"}
+<img src="images/pic30.png">
+<img src="images/pic31.png">
+<img src="images/pic32.png">
 
 Whenever we worked on new features or made any changes, we would first
 pull from the remote repository main branch with 'git pull origin main'
@@ -1074,8 +1043,8 @@ Pull Request is initiated.
 
 **GitHub Issues:**
 
-![](media/image29.png){width="6.267716535433071in"
-height="6.208333333333333in"}We made use of GitHub Issues to keep track
+<img src="images/pic33.png">
+We made use of GitHub Issues to keep track
 of the tasks that we needed to do or rectify any bugs identified,
 tagging them with the appropriate labels and assigning them to whoever
 is tasked to complete it via assignees. Only when the associated Pull
@@ -1084,11 +1053,8 @@ issue be closed.
 
 **Pull Requests:**
 
-![](media/image3.png){width="4.593206474190726in"
-height="4.203125546806649in"}
-
-![](media/image13.png){width="5.001558398950131in"
-height="0.6928149606299212in"}
+<img src="images/pic34.png">
+<img src="images/pic35.png">
 
 Whenever new pieces of code is finalised and pushed from our local
 machine to the remote repository, we will initiate a Pull Request
@@ -1105,7 +1071,7 @@ thereafter.
 **How to access the PoC:**
 
 - Deployed site:
-  [[https://goldgoldgold-nq1y.onrender.com]{.underline}](https://goldgoldgold-nq1y.onrender.com)
+  https://goldgoldgold-nq1y.onrender.com
 
 **What the PoC demonstrates:**
 
@@ -1113,27 +1079,23 @@ thereafter.
     (push-ups or sit-ups). Sessions are persisted in our PostgreSQL
     database (Supabase).
 
-![](media/image31.png){width="4.183850612423447in"
-height="0.4648720472440945in"}
+<img src="images/pic36.png">
 
-![](media/image44.png){width="6.267716535433071in"
-height="0.7361111111111112in"}
+<img src="images/pic37.png">
 
 2.  Webcam feed, pose detection and rep counting is successfully
     communicated between frontend and backend.
 
-![](media/image4.png){width="2.8838582677165356in"
-height="0.46875in"}![](media/image36.png){width="2.9352438757655293in"
-height="0.4765715223097113in"}
+<img src="images/pic38.png">
+<img src="images/pic39.png">
 
 3.  Results overlay provides a summary of the completed session
 
-![](media/image8.png){width="2.8609372265966755in"
-height="2.101913823272091in"}![](media/image5.png){width="2.7607753718285215in"
-height="2.091497156605424in"}
+<img src="images/pic40.png">
+<img src="images/pic41.png">
 
 **Video Demonstration:**
-[[https://drive.google.com/file/d/11-i1bsAervp5Ewfdka0bs_NHBqAKeAdM/view?usp=sharing]{.underline}](https://drive.google.com/file/d/11-i1bsAervp5Ewfdka0bs_NHBqAKeAdM/view?usp=sharing)
+https://drive.google.com/file/d/11-i1bsAervp5Ewfdka0bs_NHBqAKeAdM/view?usp=sharing
 
 ##  
 
@@ -1154,18 +1116,15 @@ results.
 
 Link to test files:
 
-[[https://github.com/briancps/GoldGoldGold/tree/88d0df4a8e28bd2c6865be1afe77d1064e3326de/tests]{.underline}](https://github.com/briancps/GoldGoldGold/tree/88d0df4a8e28bd2c6865be1afe77d1064e3326de/tests)
+https://github.com/briancps/GoldGoldGold/tree/88d0df4a8e28bd2c6865be1afe77d1064e3326de/tests
 
-[[https://github.com/briancps/GoldGoldGold/blob/88d0df4a8e28bd2c6865be1afe77d1064e3326de/frontend/src/utils/calculateAngle.test.ts]{.underline}](https://github.com/briancps/GoldGoldGold/blob/88d0df4a8e28bd2c6865be1afe77d1064e3326de/frontend/src/utils/calculateAngle.test.ts)
+https://github.com/briancps/GoldGoldGold/blob/88d0df4a8e28bd2c6865be1afe77d1064e3326de/frontend/src/utils/calculateAngle.test.ts
 
-![](media/image15.png){width="4.354453193350831in"
-height="1.3621620734908138in"}
+<img src="images/pic42.png">
 
-![](media/image26.png){width="6.267716535433071in"
-height="0.7361111111111112in"}
+<img src="images/pic43.png">
 
-![](media/image32.png){width="6.267716535433071in"
-height="1.3611111111111112in"}
+<img src="images/pic44.png">
 
 This ensures that in the event the user performs a partial push-up rep,
 whereby they did not go fully down to the proper down position before
@@ -1187,7 +1146,7 @@ Our integration tests verifies the functionality of our routes by
 simulating HTTP requests via a test client and mock object and checking
 if the status code returned is as expected.
 
-![](media/image21.png){width="6.267716535433071in" height="4.0in"}
+<img src="images/pic45.png">
 
 This verifies that our */session/save* route is functional. Whereby in
 the event a user's session has ended, the user's exercise data would be

@@ -3,6 +3,7 @@ import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
 import PushUp from './pages/PushUp';
 import SitUp from './pages/SitUp';
+import History from './pages/History';
 
 function App() {
   return (
@@ -18,6 +19,8 @@ function App() {
         <Route path="/pushup" element={<PushUp />} />
         {/* when URL is "/situp", show the SitUp component */}
         <Route path="/situp" element={<SitUp />} />
+        {/* when URL is "/history", show the History component */}
+        <Route path="/history" element={<History />} />
       </Routes>
     </BrowserRouter>
   );

@@ -16,26 +16,26 @@ function MainPage() {
     const navigate = useNavigate();
     
     // this protects the /main route from being accessed without logging in first:
-   useEffect(
-       () => {
+    useEffect(
+        () => {
            const checkAuth = async () => { // this function checks if the user is logged in
-               const { data: { session } } = await supabase.auth.getSession();
-               // the above asks supabase "is there a currently logged in user?", which it returns an object like { data: { session: ... } }
-               // we then unpack that object to only extract the session value directly
-               if (!session) {   // if there is no session, redirect back to login page
-                   navigate('/');
-               }
-           }
+                const { data: { session } } = await supabase.auth.getSession();
+                // the above asks supabase "is there a currently logged in user?", which it returns an object like { data: { session: ... } }
+                // we then unpack that object to only extract the session value directly
+                if (!session) {   // if there is no session, redirect back to login page
+                    navigate('/');
+                }
+            }
            checkAuth() // actually calling the defined function above
-       },
+        },
        [] // recall that the empty [] here means "only run this once when the page first loads"
-   );
+    );
 
-   const handleHomeButton = async () => {
-    navigate('/main');
-   }
+    const handleHomeButton = async () => {
+        navigate('/main');
+    }
 
-   return (
+    return (
     <Layout onHomeButton={handleHomeButton}>
         <div style = {{
             display : 'flex',
@@ -126,6 +126,6 @@ function MainPage() {
             </p>
         </div>
     </Layout>
-   )
+    )
 }
 export default MainPage; // this line means we are making the MainPage function available for other files to import and use.

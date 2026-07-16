@@ -89,5 +89,21 @@ def session_reset():
     reset_rep_state()
     return jsonify({"Message" : "Session has been reset!"})
 
+@app.route("/session/history", methods = ["GET"])
+def session_history():
+    # Obtain the currently logged-in user's email from the frontend
+    user_email = request.args.get('user_email')
+
+    if user_email is None:
+        return jsonify({'Error Message' : 'No user_email Received'}), 400
+    
+    try:
+        # From our Supabase table, retrieve all the relevant information from the corresponding columns ordered from the most recent to least recent
+        # But only retrieve it from rows that matches the email of the currently logged-in user.
+        response = supabase_client.table('userprofiles').select('exercise_type, rep_count, created_at, video_url').eq('user_email', user_email).order('created_at', desc = True).execute()
+        return jsonify({'Session History Data' : response.data}), 200
+    except Exception as e:
+        return jsonify({'Error Message' : str(e)}), 500
+
 if __name__ == '__main__':
     app.run(debug = True)

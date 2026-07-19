@@ -8,10 +8,10 @@ app = Flask(__name__)
 # To allow React server to communicate with Flask backend without any errors
 CORS(app)
 
-# Ensure Flask backend server is functional
-@app.route('/')
-def test():
-    return jsonify({'Test Message' : 'Server is running and working'}), 200
+# Ensure Flask backend server is healthy. Used for Render's cold start workaround via a cron job.
+@app.route('/health')
+def health():
+    return jsonify({'status' : 'healthy'}), 200
 
 # To ensure flask backend receives user_email, angle and exercise_type and returns a response
 @app.route('/pose', methods = ['POST'])

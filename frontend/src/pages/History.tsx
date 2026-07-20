@@ -85,7 +85,9 @@ function History() {
                     fontWeight : '700',
                     fontFamily : 'Bebas Neue',
                     color : 'rgb(206, 169, 36)',
-                    margin : '0'
+                    margin : '0',
+                    marginLeft : '35px',
+                    marginTop : '-9px'
                 }}>
                     Workout History
                 </h1>
@@ -100,25 +102,25 @@ function History() {
                         width : '100%',
                         borderCollapse : 'collapse',
                         fontFamily : 'Bebas Neue',
-                        fontWeight : '700'
+                        fontWeight : '700',
                     }}>
                         <thead>
                             <tr style = {{borderBottom : '2px solid rgb(206, 169, 36)'}}>
                                 <th style = {thStyle}>Date</th>
                                 <th style = {thStyle}>Exercise</th>
                                 <th style = {thStyle}>Reps</th>
-                                <th style = {thStyle}>Recording</th>
+                                <th style = {{...thStyle, borderRight : 'none'}}>Video Playback</th>
                             </tr>
                         </thead>
 
                         <tbody>
                             {/* session is the current Session object in the array, and index is the position of the object in the array */}
                             {session.map((session, index) => (
-                                <tr key = {index}>
+                                <tr key = {index} style = {{borderBottom : '1px solid rgba(255, 255, 255, 0.1)', backgroundColor : index % 2 == 0 ? 'rgba(255, 255, 255, 0.08)' : 'transparent'}}>
                                     <td style = {tdStyle}>{formatDate(session.created_at)}</td>
                                     <td style = {tdStyle}>{session.exercise_type}</td>
                                     <td style = {tdStyle}>{session.rep_count}</td>
-                                    <td style = {tdStyle}>
+                                    <td style = {{...tdStyle, borderRight : 'none'}}>
                                         {session.video_url ? 
                                             <button 
                                                 onClick = {() => setSelectVideo(session.video_url)}
@@ -162,7 +164,7 @@ function History() {
                                     src = {selectVideo}
                                     controls
                                     autoPlay
-                                    onClick={event => event.stopPropagation} 
+                                    onClick={event => event.stopPropagation()} 
                                     style = {{
                                         maxHeight : '80vh',
                                         maxWidth : '90vw',
@@ -177,15 +179,20 @@ function History() {
 
 const thStyle : React.CSSProperties = {
     padding : '12px 16px',
-    textAlign : 'left',
+    textAlign : 'center',
     fontSize : '18px',
     color : 'white',
+    fontWeight : '700',
+    borderRight : '1px solid rgba(206, 169, 36, 0.3)',
 }
 
 const tdStyle : React.CSSProperties = {
     padding: '12px 16px',
+    textAlign : 'center',
     fontSize: '18px',
-    color: 'white'
+    color: 'white',
+    fontWeight : '700',
+    borderRight : '1px solid rgba(206, 169, 36, 0.3)'
 }
 
 export default History;

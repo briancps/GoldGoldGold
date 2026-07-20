@@ -129,26 +129,26 @@ function PushUp() {
     const hipAngle = calculateAngle(leftShoulder, leftHip,leftKnee);
 
     try {
-    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/pose`, {
-      method : 'POST',
-      headers : {'Content-Type' : 'application/json'},
-      body : JSON.stringify({
-      user_email : userEmailRef.current,
-      exercise_type : 'push-up',
-      elbow_angle : elbowAngle,
-      hip_angle : hipAngle,
-      // We have to ensure all landmarks are visible to count as a valid rep
-      shoulder_visibility: leftShoulder.visibility,
-      elbow_visibility: leftElbow.visibility,
-      wrist_visibility: leftWrist.visibility,
-      hip_visibility: leftHip.visibility,
-      knee_visibility: leftKnee.visibility
-      })
-    });
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/pose`, {
+        method : 'POST',
+        headers : {'Content-Type' : 'application/json'},
+        body : JSON.stringify({
+        user_email : userEmailRef.current,
+        exercise_type : 'push-up',
+        elbow_angle : elbowAngle,
+        hip_angle : hipAngle,
+        // We have to ensure all landmarks are visible to count as a valid rep
+        shoulder_visibility: leftShoulder.visibility,
+        elbow_visibility: leftElbow.visibility,
+        wrist_visibility: leftWrist.visibility,
+        hip_visibility: leftHip.visibility,
+        knee_visibility: leftKnee.visibility
+        })
+      });
 
-    const data = await response.json();
-    // If data.count is null/undefined, we return a default value of 0
-    setRepCount(data['Valid Count'] ?? 0);
+      const data = await response.json();
+      // If data.count is null/undefined, we return a default value of 0
+      setRepCount(data['Valid Count'] ?? 0);
     } catch (err) {
       console.error("Data failed to send: ", err);
     }

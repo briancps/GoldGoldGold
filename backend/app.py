@@ -101,7 +101,7 @@ def session_history():
         # From our Supabase table, retrieve all the relevant information from the corresponding columns ordered from the most recent to least recent
         # But only retrieve it from rows that matches the email of the currently logged-in user.
         response = supabase_client.table('userprofiles').select('exercise_type, rep_count, created_at, video_url').eq('user_email', user_email).order('created_at', desc = True).execute()
-        return jsonify({'Session History Data' : response.data}), 200
+        return jsonify({'Sessions' : response.data}), 200
     except Exception as e:
         return jsonify({'Error Message' : str(e)}), 500
 

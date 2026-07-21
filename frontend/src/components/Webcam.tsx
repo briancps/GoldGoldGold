@@ -13,13 +13,13 @@ import { PoseLandmarker, FilesetResolver, DrawingUtils } from '@mediapipe/tasks-
 interface WebcamProps {
     // When a pose is detected, it calls this field to forward the pose data detected up to the parent page.
     poseDetected : (poseLandmarks : any) => void;
-    exerciseType? : string
+    exerciseType : string;
+    canvasRef : React.RefObject<HTMLCanvasElement>; // Expect to a React ref object that points to an HTML canvas element
 }
 
-function Webcam({poseDetected, exerciseType} : WebcamProps) {
+function Webcam({poseDetected, exerciseType, canvasRef} : WebcamProps) {
     const videoRef = useRef<HTMLVideoElement>(null); // null is the initial value of the ref. So before the page loads, videoRef.current = null (nothing there yet)
     // then after the page loads, videoRef.current = the actual video element
-    const canvasRef = useRef<HTMLCanvasElement>(null); // canvas is like a whiteboard placed in front of the projector - it shows the video image + draws the skeleton on top
     const [isLoading, setIsLoading] = useState(true);
     // useState returns 2 things (the value and the setter function). So we use [] to unpack both into separate named variables in one line
     // this is known as array destructuring

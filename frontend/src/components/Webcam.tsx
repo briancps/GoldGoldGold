@@ -14,7 +14,7 @@ interface WebcamProps {
     // When a pose is detected, it calls this field to forward the pose data detected up to the parent page.
     poseDetected : (poseLandmarks : any) => void;
     exerciseType : string;
-    canvasRef : React.RefObject<HTMLCanvasElement>; // Expect to a React ref object that points to an HTML canvas element
+    canvasRef : React.RefObject<HTMLCanvasElement | null>; // Expect a React ref object that points to an HTML canvas element
 }
 
 function Webcam({poseDetected, exerciseType, canvasRef} : WebcamProps) {

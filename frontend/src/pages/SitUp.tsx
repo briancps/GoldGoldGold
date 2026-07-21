@@ -19,18 +19,18 @@ function SitUp() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   
   useEffect(
-       () => {
-           const checkAuth = async () => { // this function checks if the user is logged in
-               const { data: { session } } = await supabase.auth.getSession();
-               // the above asks supabase "is there a currently logged in user?", which it returns an object like { data: { session: ... } }
-               // we then unpack that object to only extract the session value directly
-               if (!session) {   // if there is no session, redirect back to login page
-                   navigate('/');
-               }
-           }
-           checkAuth() // actually calling the defined function above
-       },
-       [] // recall that the empty [] here means "only run this once when the page first loads"
+    () => {
+        const checkAuth = async () => { // this function checks if the user is logged in
+            const { data: { session } } = await supabase.auth.getSession();
+            // the above asks supabase "is there a currently logged in user?", which it returns an object like { data: { session: ... } }
+            // we then unpack that object to only extract the session value directly
+            if (!session) {   // if there is no session, redirect back to login page
+                navigate('/');
+            }
+        }
+        checkAuth() // actually calling the defined function above
+    },
+    [] // recall that the empty [] here means "only run this once when the page first loads"
   );
 
   // This is to reset rep state in the event that the user leaves the page (So that when user re-enters the page, rep is reset to 0)
@@ -70,7 +70,7 @@ function SitUp() {
 
     recordedBlobChunksRef.current = []; // this is to clear any possible past video blob chunks
     mediaRecorder.ondataavailable = event => {
-      if (event.data.size > 0) {
+      if (event.data.size > 0 && recordedBlobChunksRef.current) {
         recordedBlobChunksRef.current.push(event.data);
       }
     };
@@ -88,6 +88,10 @@ function SitUp() {
 
       // Accumulates all the video blob chunks into one video and generate a video url for users to view.
       mediaRecorderRef.current.onstop = () => {
+        if (!recordedBlobChunksRef.current) {
+          resolve(null);
+          return;
+        }
         const videoBlob = new Blob(recordedBlobChunksRef.current, {type : "video/webm"});
         const localURL = URL.createObjectURL(videoBlob);
         resolve(localURL);

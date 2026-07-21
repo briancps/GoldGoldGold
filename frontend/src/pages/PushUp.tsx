@@ -69,7 +69,7 @@ function PushUp() {
 
     recordedBlobChunksRef.current = []; // this is to clear any possible past video blob chunks
     mediaRecorder.ondataavailable = event => {
-      if (event.data.size > 0) {
+      if (event.data.size > 0 && recordedBlobChunksRef.current) {
         recordedBlobChunksRef.current.push(event.data);
       }
     };
@@ -87,6 +87,10 @@ function PushUp() {
 
       // Accumulates all the video blob chunks into one video and generate a video url for users to view.
       mediaRecorderRef.current.onstop = () => {
+        if (!recordedBlobChunksRef.current) {
+          resolve(null);
+          return;
+        }
         const videoBlob = new Blob(recordedBlobChunksRef.current, {type : "video/webm"});
         const localURL = URL.createObjectURL(videoBlob);
         resolve(localURL);

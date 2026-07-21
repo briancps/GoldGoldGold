@@ -16,6 +16,7 @@ Left shoulder - 11; Left hip - 23; Left knee - 25;
 
 function SitUp() {
   const navigate = useNavigate();
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   
   useEffect(
        () => {
@@ -51,6 +52,50 @@ function SitUp() {
       })
     }
   }, []); // This runs when the component mounts
+
+  // refs required for video capture
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const recordedBlobChunksRef = useRef<Blob[] | null>(null);
+  const videoURLRef = useRef<string | null>(null);
+
+  const startRecording = () => {
+    // if canvasRef is yet to point to the HTML canvas element, don't start recording and just return.
+    if (!canvasRef.current) {
+      return;
+    }
+
+    const stream = canvasRef.current.captureStream(30); // Records the video in the HTML canvas element at 30 frames per second
+    const options = { mimeType : "video/webm; codecs=vp9"};
+    const mediaRecorder = new MediaRecorder(stream, options);
+
+    recordedBlobChunksRef.current = []; // this is to clear any possible past video blob chunks
+    mediaRecorder.ondataavailable = event => {
+      if (event.data.size > 0) {
+        recordedBlobChunksRef.current.push(event.data);
+      }
+    };
+    mediaRecorder.start(100); // Obtain a new video blob chunk every 100ms
+    mediaRecorderRef.current = mediaRecorder // save a reference to the recorder to be accessed later
+  }
+
+  // Since stopping the recording is not instant, stopRecording function has to return a Promise unlike the function startRecording
+  const stopRecording = () : Promise<string | null> => {
+    return new Promise((resolve) => {
+      if (!mediaRecorderRef.current) {
+        resolve(null);
+        return;
+      }
+
+      // Accumulates all the video blob chunks into one video and generate a video url for users to view.
+      mediaRecorderRef.current.onstop = () => {
+        const videoBlob = new Blob(recordedBlobChunksRef.current, {type : "video/webm"});
+        const localURL = URL.createObjectURL(videoBlob);
+        resolve(localURL);
+      };
+
+      mediaRecorderRef.current.stop();
+    })
+  }
 
   // Track if the user has started a session
   const [isSessionActive, setIsSessionActive] = useState(false);
@@ -180,9 +225,12 @@ function SitUp() {
   const handleCountdownEnd = () => {
     setIsCountingDown(false);
     isCountingDownRef.current = false;
+    startRecording();
   }
 
   const handleSessionEnded = async () => {
+    const videoURL = await stopRecording();
+    videoURLRef.current = videoURL;
     setIsSessionEnded(true);
     setIsSessionActive(false);
     isSessionActiveRef.current = false;
@@ -265,7 +313,7 @@ function SitUp() {
               Start
             </button> : null}
 
-          <Webcam poseDetected={handlePoseDetected} exerciseType="sit-up"></Webcam>
+          <Webcam poseDetected={handlePoseDetected} exerciseType="sit-up" canvasRef={canvasRef}></Webcam>
 
           {isSessionEnded ? 
             <ResultsOverlay exerciseType="Sit-Up" repCount={repCount} onTryAgain={handleSessionStart}></ResultsOverlay> : null}

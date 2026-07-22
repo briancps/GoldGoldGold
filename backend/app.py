@@ -61,6 +61,7 @@ def session_save():
     user_email = data.get('user_email')
     exercise_type = data.get('exercise_type')
     rep_count = data.get('rep_count')
+    video_url = data.get('video_url')
 
     if user_email is None:
         return jsonify({'Error Message' : 'No user_email Received'}), 400
@@ -74,7 +75,8 @@ def session_save():
         'user_email' : user_email,
         'exercise_type' : exercise_type,
         # int(rep_count) is to ensure rep_count data is forwarded to Supabase as in integer to be saved as expected
-        'rep_count' : int(rep_count)
+        'rep_count' : int(rep_count),
+        'video_url' : video_url
         }).execute()
     except Exception as err:
         return jsonify({'Error Message' : str(err)}), 500

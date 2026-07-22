@@ -116,6 +116,7 @@ function SitUp() {
   // To ensure React has the latest boolean value on whether the session is active or not
   const isSessionActiveRef = useRef(false);
   const isCountingDownRef = useRef(false);
+  const isSessionEndedRef = useRef(false);
 
   useEffect(() => {
     isSessionActiveRef.current = isSessionActive;
@@ -161,7 +162,7 @@ function SitUp() {
 
   const handlePoseDetected = async (poseLandmarks : any) => {
     // If session has yet to be started, we don't send any data yet
-    if (!isSessionActiveRef.current || isCountingDownRef.current) {
+    if (!isSessionActiveRef.current || isCountingDownRef.current || isSessionEndedRef.current) {
       return;
     }
 
@@ -194,6 +195,11 @@ function SitUp() {
       });
 
       const data = await response.json();
+
+      if(isSessionEndedRef.current) {
+        return;
+      }
+      
       // If data.count is null/undefined, we return a default value of 0
       setRepCount(data['Valid Count'] ?? 0);
     } catch (err) {
@@ -220,6 +226,7 @@ function SitUp() {
 
   // This is to reset when user clicks "Start" or "Try Again". This ensures the new session starts afresh for the current user
   const handleSessionStart = async () => {
+    isSessionEndedRef.current = false;
     setRepCount(0);
     repCountRef.current = 0;
     lastSentRef.current = 0;
@@ -238,6 +245,11 @@ function SitUp() {
   }
 
   const handleSessionEnded = async () => {
+    isSessionEndedRef.current = true;
+    setIsSessionEnded(true);
+    setIsSessionActive(false);
+    isSessionActiveRef.current = false;
+
     const {localURL, videoBlob} = await stopRecording();
     videoURLRef.current = localURL;
 
@@ -262,10 +274,6 @@ function SitUp() {
         videoUrl = urlData.publicUrl;
       }
     }
-
-    setIsSessionEnded(true);
-    setIsSessionActive(false);
-    isSessionActiveRef.current = false;
 
     await fetch(`${import.meta.env.VITE_BACKEND_URL}/session/save`, {
       method : 'POST',

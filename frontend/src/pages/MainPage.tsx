@@ -42,26 +42,8 @@ function MainPage() {
             flexDirection : 'column',
             alignItems : 'center',
             justifyContent : 'center',
+            marginTop : '60px'
         }}>
-            <p style = {{
-                color : 'white',
-                fontSize : '20px',
-                fontWeight : '700',
-                fontFamily : 'Bebas Neue',
-                marginLeft : '24px'}}> 
-                Note that upon your very first login, the live rep counter may be glitchy and inaccurate. 
-            </p>
-            
-            <p style = {{
-                color : 'white',
-                fontSize : '20px',
-                fontWeight : '700',
-                fontFamily : 'Bebas Neue',
-                marginTop : '-5px',
-                marginLeft : '24px'}}> 
-                Give it 10 seconds and try again!
-            </p>
-
             <h1 style = {{
                 fontSize : '36px',
                 fontWeight : '700',

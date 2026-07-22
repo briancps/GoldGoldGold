@@ -86,7 +86,6 @@ function History() {
                     fontFamily : 'Bebas Neue',
                     color : 'rgb(206, 169, 36)',
                     margin : '0',
-                    marginLeft : '35px',
                     marginTop : '-9px'
                 }}>
                     Workout History

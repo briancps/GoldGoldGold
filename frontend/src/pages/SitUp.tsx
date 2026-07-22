@@ -17,6 +17,8 @@ Left shoulder - 11; Left hip - 23; Left knee - 25;
 function SitUp() {
   const navigate = useNavigate();
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const recordingCanvasRef = useRef<HTMLCanvasElement>(null);
+  const isRecordingRef = useRef(false);
   
   useEffect(
     () => {
@@ -60,11 +62,13 @@ function SitUp() {
 
   const startRecording = () => {
     // if canvasRef is yet to point to the HTML canvas element, don't start recording and just return.
-    if (!canvasRef.current) {
+    if (!recordingCanvasRef.current || isRecordingRef.current) {
       return;
     }
 
-    const stream = canvasRef.current.captureStream(30); // Records the video in the HTML canvas element at 30 frames per second
+    isRecordingRef.current = true;
+
+    const stream = recordingCanvasRef.current.captureStream(30); // Records the video in the HTML canvas element at 30 frames per second
     const options = { mimeType : "video/webm; codecs=vp9"};
     const mediaRecorder = new MediaRecorder(stream, options);
 
@@ -88,6 +92,7 @@ function SitUp() {
 
       // Accumulates all the video blob chunks into one video and generate a video url for users to view.
       mediaRecorderRef.current.onstop = () => {
+        isRecordingRef.current = false;
         if (!recordedBlobChunksRef.current) {
           resolve({localURL: null, videoBlob: null});
           return;
@@ -341,7 +346,7 @@ function SitUp() {
               Start
             </button> : null}
 
-          <Webcam poseDetected={handlePoseDetected} exerciseType="sit-up" canvasRef={canvasRef}></Webcam>
+          <Webcam poseDetected={handlePoseDetected} exerciseType="sit-up" canvasRef={canvasRef} recordingCanvasRef={recordingCanvasRef} repCount={repCount}></Webcam>
 
           {isSessionEnded ? 
             <ResultsOverlay exerciseType="Sit-Up" repCount={repCount} onTryAgain={handleSessionStart}></ResultsOverlay> : null}

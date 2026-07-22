@@ -15,9 +15,16 @@ interface WebcamProps {
     poseDetected : (poseLandmarks : any) => void;
     exerciseType : string;
     canvasRef : React.RefObject<HTMLCanvasElement | null>; // Expect a React ref object that points to an HTML canvas element
+    recordingCanvasRef : React.RefObject<HTMLCanvasElement | null>;
+    repCount : number;
 }
 
-function Webcam({poseDetected, exerciseType, canvasRef} : WebcamProps) {
+function Webcam({poseDetected, exerciseType, canvasRef, recordingCanvasRef, repCount} : WebcamProps) {
+    const repCountRef = useRef(repCount);
+    useEffect(() => {
+        repCountRef.current = repCount;
+    }, [repCount]); // ensures the drawing loop made below would always have the latest count
+
     const videoRef = useRef<HTMLVideoElement>(null); // null is the initial value of the ref. So before the page loads, videoRef.current = null (nothing there yet)
     // then after the page loads, videoRef.current = the actual video element
     const [isLoading, setIsLoading] = useState(true);
@@ -84,6 +91,26 @@ function Webcam({poseDetected, exerciseType, canvasRef} : WebcamProps) {
                 // syntax: drawImage(img, x, y), where img is the image/video element to use, x and y are the x- and y-coordinates for where to place the image on canvas
                 // draws the current webcam frame onto the canvas - this is what makes you visible on screen
 
+                const recordingCanvas = recordingCanvasRef.current;
+                if (recordingCanvas) {
+                    // This ensures the canvas dimensions match the actual video's dimension
+                    recordingCanvas.width = video.videoWidth;
+                    recordingCanvas.height = video.videoHeight;
+
+                    // Get the 2d drawing context from the canvas allowing us to utilise methods such as clearRect, drawImage, fillStyle etc.
+                    const recordingContext = recordingCanvas.getContext('2d');
+
+                    if (recordingContext) {
+                        // This is to clear anything that was previously drawn on the canvas
+                        recordingContext.clearRect(0, 0, recordingCanvas.width, recordingCanvas.height);
+                        // Draw the current video frame onto the canvas
+                        recordingContext.drawImage(video, 0, 0);
+                        recordingContext.fillStyle = "white";
+                        recordingContext.font = "40px Bebas Neue";
+                        recordingContext.fillText(`Reps: ${repCountRef.current}`, 30, 60);
+                    }
+                }
+
                 const results = poseLandmarker.detectForVideo(video, performance.now());
                 // above runs pose detection on the current video frame. performance.now() gives the current timestamp
                 // in milliseconds, which MediaPipe needs to track movement across frames
@@ -131,6 +158,11 @@ function Webcam({poseDetected, exerciseType, canvasRef} : WebcamProps) {
             justifyContent: 'center',
             padding: '16px',
         }}>
+            <canvas 
+                ref = {recordingCanvasRef}
+                style={{display: 'none'}}>
+            </canvas>
+
             {/* This is to display the loading message as the webcam feed is being set up to be displayed */}
             {isLoading ? 
                 <div>

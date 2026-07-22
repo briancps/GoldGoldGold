@@ -78,22 +78,22 @@ function PushUp() {
   }
 
   // Since stopping the recording is not instant, stopRecording function has to return a Promise unlike the function startRecording
-  const stopRecording = () : Promise<string | null> => {
+  const stopRecording = () : Promise<{localURL: string | null; videoBlob: Blob | null}> => {
     return new Promise((resolve) => {
       if (!mediaRecorderRef.current) {
-        resolve(null);
+        resolve({localURL: null, videoBlob: null});
         return;
       }
 
       // Accumulates all the video blob chunks into one video and generate a video url for users to view.
       mediaRecorderRef.current.onstop = () => {
         if (!recordedBlobChunksRef.current) {
-          resolve(null);
+          resolve({localURL: null, videoBlob: null});
           return;
         }
         const videoBlob = new Blob(recordedBlobChunksRef.current, {type : "video/webm"});
         const localURL = URL.createObjectURL(videoBlob);
-        resolve(localURL);
+        resolve({localURL, videoBlob});
       };
 
       mediaRecorderRef.current.stop();
@@ -240,8 +240,31 @@ function PushUp() {
   }
 
   const handleSessionEnded = async () => {
-    const videoURL = await stopRecording();
-    videoURLRef.current = videoURL;
+    const {localURL, videoBlob} = await stopRecording();
+    videoURLRef.current = localURL;
+
+    let videoUrl: string | null = null;
+
+    // upload video Blob to Supabase storage
+    if (videoBlob && userEmailRef.current) {
+      const fileName = `${userEmailRef.current}_${Date.now()}.webm`;
+      const {data, error} = await supabase.storage
+                                          .from('session-recordings')
+                                          .upload(fileName, videoBlob, {
+                                            contentType: 'video/webm',
+                                            upsert: false // don't overwrite existing files
+                                          });
+      if (error) {
+        console.error('Failed to upload video:', error.message);
+      } else {
+        // get the public URL of the uploaded video
+        const {data: urlData} = supabase.storage
+                                        .from('session-recordings')
+                                        .getPublicUrl(data.path);
+        videoUrl = urlData.publicUrl;
+      }
+    }
+
     setIsSessionEnded(true);
     setIsSessionActive(false);
     isSessionActiveRef.current = false;
@@ -250,9 +273,10 @@ function PushUp() {
       method : 'POST',
       headers : {'Content-Type' : 'application/json'},
       body : JSON.stringify({
-      user_email : userEmailRef.current,
-      exercise_type : 'push-up',
-      rep_count : repCountRef.current
+        user_email : userEmailRef.current,
+        exercise_type : 'push-up',
+        rep_count : repCountRef.current,
+        video_url: videoUrl
       })
     })
   }

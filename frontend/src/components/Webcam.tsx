@@ -105,7 +105,7 @@ function Webcam({poseDetected, exerciseType, canvasRef, recordingCanvasRef, repC
                         recordingContext.clearRect(0, 0, recordingCanvas.width, recordingCanvas.height);
                         // Draw the current video frame onto the canvas
                         recordingContext.drawImage(video, 0, 0);
-                        recordingContext.fillStyle = "white";
+                        recordingContext.fillStyle = "rgb(206, 169, 36)";
                         recordingContext.font = "40px Bebas Neue";
                         recordingContext.fillText(`Reps: ${repCountRef.current}`, 30, 60);
                     }

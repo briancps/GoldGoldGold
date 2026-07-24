@@ -4,6 +4,7 @@ import MainPage from './pages/MainPage';
 import PushUp from './pages/PushUp';
 import SitUp from './pages/SitUp';
 import History from './pages/History';
+import Guide from './pages/Guide';
 
 function App() {
   return (
@@ -21,6 +22,8 @@ function App() {
         <Route path="/situp" element={<SitUp />} />
         {/* when URL is "/history", show the History component */}
         <Route path="/history" element={<History />} />
+        {/* when URL is "/guide", show the Guide component */}
+        <Route path="/guide" element={<Guide />} />
       </Routes>
     </BrowserRouter>
   );

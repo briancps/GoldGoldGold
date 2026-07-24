@@ -14,9 +14,9 @@ def client():
     with app.test_client() as client:
         yield client # Provide the test client to any tests here that requires it
 
-# Testing '/' route
-def test_root_route(client):
-    response = client.get('/')
+# Testing '/health' route
+def test_health_route(client):
+    response = client.get('/health')
     assert response.status_code == 200
 
 # Testing '/pose' route
@@ -46,7 +46,7 @@ def test_pose_response_with_invalid_data(client):
 
 # Testing '/session/save' route
 '''
-@patch('app.supabase_client') replaces the actual supabase_client object with a mock object. This prevents actual database operations
+@patch('backend.app.supabase_client') replaces the actual supabase_client object with a mock object. This prevents actual database operations
 while still being able to test the functionality of the route and database.
 '''
 @patch('backend.app.supabase_client')
@@ -70,7 +70,8 @@ def test_session_save_route_with_valid_data(mock_supabase, client):
     required_fields = {
         'user_email' : 'testing123@gmail.com', 
         'exercise_type' : 'push-up',
-        'rep_count' : 60
+        'rep_count' : 60,
+        'video_url' : 'https://dummy.webm'
     }
     response = client.post('/session/save', json = required_fields)
     assert response.status_code == 201
@@ -78,4 +79,17 @@ def test_session_save_route_with_valid_data(mock_supabase, client):
 # Since invalid data is being inputted, it should never reach our Supabase database. Thus, no mock object is required to be made here
 def test_session_save_route_with_invalid_data(client):
     response = client.post('/session/save', json = {'user_email' : 'testing123@gmail.com'})
+    assert response.status_code == 400
+
+# Testing '/session/history' route
+@patch('backend.app.supabase_client')
+def test_session_history_for_new_users(mock_supabase, client):
+    mock_supabase.table.return_value.select.return_value.eq.return_value.order.return_value.execute.return_value.data = []
+    response = client.get('/session/history?user_email=newuser@gmail.com')
+    data = response.get_json()
+    assert data["Sessions"] == []
+
+def test_session_history_with_missing_data(client):
+    # Missing user_email field required to query Supabase table for past session data for the currently logged-in user
+    response = client.get('/session/history')
     assert response.status_code == 400

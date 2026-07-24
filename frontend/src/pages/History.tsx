@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import Layout from '../components/Layout';
+import replay from '../assets/replay_button.png';
 
 // Create type here to rep the data to be displayed in the History page.
 // This is required to create an array of objects for all the sessions that the user completes to display all the relevant data on the History page
@@ -124,6 +125,10 @@ function History() {
                                             <button 
                                                 onClick = {() => setSelectVideo(session.video_url)}
                                                 style = {{
+                                                    display: 'inline-flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    gap: '0.5px',
                                                     padding: '6px 16px',
                                                     fontSize: '16px',
                                                     fontFamily: 'Bebas Neue',
@@ -132,7 +137,7 @@ function History() {
                                                     borderRadius: '6px',
                                                     color: 'black',
                                                     cursor: 'pointer'
-                                                }}> Watch
+                                                }}> Watch <img src ={replay} style = {{width: '16px', height: '16px', transform: 'translateY(-1.4px)'}}></img>
                                             </button> : <span style = {{fontSize : '16px'}}>No Recording</span>}
                                     </td>
                                 </tr>

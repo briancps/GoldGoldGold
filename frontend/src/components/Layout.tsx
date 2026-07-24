@@ -88,6 +88,23 @@ function Layout({children, onHomeButton} : LayoutProps) {
                     </button>
 
                     <button
+                        onClick = {() => navigate('/guide')}
+                        style = {{
+                            height: '50px',
+                            width: isLoggingOut ? '150px' : '100px',
+                            padding: '8px 16px',
+                            fontSize: '15px',
+                            fontWeight: '700',
+                            fontFamily: 'Bebas Neue',
+                            background: 'rgb(206, 169, 36)',
+                            border: '1px solid grey',
+                            borderRadius: '8px',
+                            color: 'black'
+                        }}>
+                            ⓘ Guide
+                    </button>
+
+                    <button
                         onClick = {() => navigate('/history')}
                         style = {{
                             height: '50px',

@@ -2,10 +2,10 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import Layout from '../components/Layout';
-import proper_down_push_up from '../assets/proper down push-up.png';
-import proper_up_push_up from '../assets/proper up push-up.png';
-import proper_down_sit_up from '../assets/proper down sit-up.png';
-import proper_up_sit_up from '../assets/proper up sit-up.png';
+import proper_down_push_up from '../assets/new proper down push-up.png';
+import proper_up_push_up from '../assets/new proper up push-up.png';
+import proper_down_sit_up from '../assets/new proper down sit-up.png';
+import proper_up_sit_up from '../assets/new proper up sit-up.png';
 
 function Guide() {
     const navigate = useNavigate();
@@ -61,19 +61,19 @@ function Guide() {
                 </div>
 
                 <h1 style = {heading}>Proper Sit-up form</h1>
-                <p style={{fontFamily: 'sans-serif', color:'white', width: '925px', marginTop:'-35px', marginLeft:'341px', fontSize: '20px'}}>
+                <p style={{fontFamily: 'sans-serif', color:'white', width: '925px', marginTop:'-35px', marginLeft:'140px', fontSize: '20px'}}>
                     <br></br>• Proper down: Back is flat on the floor at the bottom of the rep
-                    <br></br>• Proper up: Torso is crunched high enough for elbows to touch knees
+                    <br></br>• Proper up: Torso is crunched high enough for elbows to touch thighs at the top of the rep
                 </p>
                 <div style={imageRow}>
                     <div style={imageContainer}>
-                        <img src={proper_up_sit_up} style = {image}></img>
-                        <p style = {caption}>Proper Sit-up Up position</p>
+                        <img src={proper_down_sit_up} style = {image}></img>
+                        <p style = {caption}>Proper Sit-up Down position</p>
                     </div>
 
                     <div style={imageContainer}>
-                        <img src={proper_down_sit_up} style = {image}></img>
-                        <p style = {caption}>Proper Sit-up Down position</p>
+                        <img src={proper_up_sit_up} style = {image}></img>
+                        <p style = {caption}>Proper Sit-up Up position</p>
                     </div>
                 </div>
 

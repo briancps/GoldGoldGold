@@ -1,5 +1,5 @@
 # GoldGoldGold
-For the updated version of our README, visit the following link: https://drive.google.com/file/d/14HwIbVnQoKKaoLNVSo0ihRJNgAGkGTSI/view?usp=sharing
+For the updated version of our README, visit the following link: [https://drive.google.com/file/d/14HwIbVnQoKKaoLNVSo0ihRJNgAGkGTSI/view?usp=sharing](https://drive.google.com/file/d/1ONoTmi337Sqcco6KokR-xkTGPNW2HA05/view?usp=sharing)
 
 <img src="images/pic1.png" width="200px">
 

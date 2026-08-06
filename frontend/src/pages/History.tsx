@@ -10,9 +10,8 @@ type Session = {
     exercise_type : string;
     rep_count : number;
     created_at : string;
-    video_url : string | null; // Allow null for now since video_url has yet to be implemented.
+    video_path : string | null; 
 }
-
 function History() {
     const navigate = useNavigate();
     // Ensures TypeScript knows that the data that this state will store is an array of Session objects to rep past session data of users
@@ -47,6 +46,19 @@ function History() {
             hour12 : true
         })
     }
+
+    const getSignedUrl = async (videoPath: string) => {
+        const { data, error } = await supabase.storage
+            .from('session-recordings')
+            .createSignedUrl(videoPath, 300); // 5 minute expiry = 300 seconds
+
+        if (error) {
+            console.error('Failed to generate signed URL:', error.message);
+            return null;
+        }
+
+        return data.signedUrl;
+    };
 
     // this protects the /history route from being accessed without logging in first:
     useEffect(
@@ -121,9 +133,19 @@ function History() {
                                     <td style = {tdStyle}>{session.exercise_type}</td>
                                     <td style = {tdStyle}>{session.rep_count}</td>
                                     <td style = {{...tdStyle, borderRight : 'none'}}>
-                                        {session.video_url ? 
+                                        {session.video_path ? 
                                             <button 
-                                                onClick = {() => setSelectVideo(session.video_url)}
+                                                onClick = {async () => {
+                                                    if (!session.video_path) {
+                                                        return;
+                                                    }
+
+                                                    const signedUrl = await getSignedUrl(session.video_path);
+
+                                                    if (signedUrl) {
+                                                        setSelectVideo(signedUrl);
+                                                    }
+                                                }}
                                                 style = {{
                                                     display: 'inline-flex',
                                                     alignItems: 'center',

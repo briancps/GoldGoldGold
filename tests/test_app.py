@@ -71,7 +71,7 @@ def test_session_save_route_with_valid_data(mock_supabase, client):
         'user_email' : 'testing123@gmail.com', 
         'exercise_type' : 'push-up',
         'rep_count' : 60,
-        'video_url' : 'https://dummy.webm'
+        'video_path': 'testing67@gmail.com/session_67.webm'
     }
     response = client.post('/session/save', json = required_fields)
     assert response.status_code == 201

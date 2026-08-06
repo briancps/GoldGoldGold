@@ -253,7 +253,7 @@ function SitUp() {
     const {localURL, videoBlob} = await stopRecording();
     videoURLRef.current = localURL;
 
-    let videoUrl: string | null = null;
+    let videoPath: string | null = null;
 
     // upload video Blob to Supabase storage
     if (videoBlob && userEmailRef.current) {
@@ -267,11 +267,7 @@ function SitUp() {
       if (error) {
         console.error('Failed to upload video:', error.message);
       } else {
-        // get the public URL of the uploaded video
-        const {data: urlData} = supabase.storage
-                                        .from('session-recordings')
-                                        .getPublicUrl(data.path);
-        videoUrl = urlData.publicUrl;
+        videoPath = data.path;
       }
     }
 
@@ -282,7 +278,7 @@ function SitUp() {
         user_email : userEmailRef.current,
         exercise_type : 'sit-up',
         rep_count : repCountRef.current,
-        video_url: videoUrl
+        video_path: videoPath
       })
     })
   }
